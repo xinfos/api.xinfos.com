@@ -18,6 +18,14 @@ func NewBrandRepository() *BrandRepository {
 	}
 }
 
+//BrandList - Brand list strcut
+type BrandList struct {
+	List            []*model.Brand `json:"list"`
+	CurrentPageNo   uint           `json:"current_page_no"`
+	CurrentPageSize uint           `json:"current_page_size"`
+	TotalCount      int            `json:"total_count"`
+}
+
 //Create - Create a brand
 func (repo *BrandRepository) Create(m *model.Brand) (uint64, *errs.Errs) {
 	//1.check if the category exists
@@ -83,4 +91,19 @@ func (repo *BrandRepository) FindByID(id uint64) (*model.Brand, *errs.Errs) {
 	}
 	repo.c.Set(data)
 	return data, nil
+}
+
+//FindAll - Find category by cat_id
+func (repo *BrandRepository) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) (*BrandList, *errs.Errs) {
+	data, count, err := model.BrandModel().FindAll(query, orderby, page, pageSize)
+	if err != nil {
+		return nil, errs.ErrBrandCreateFail
+	}
+	l := &BrandList{
+		List:            data,
+		CurrentPageNo:   page,
+		CurrentPageSize: pageSize,
+		TotalCount:      count,
+	}
+	return l, nil
 }

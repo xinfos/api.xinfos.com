@@ -42,3 +42,9 @@ func (s *CategoryService) FindByID(id uint64) (*model.Category, *errs.Errs) {
 func (s *CategoryService) FindAllByPID(id uint64) ([]*model.Category, *errs.Errs) {
 	return s.Repo.FindAllByPID(id)
 }
+
+//FindAll - Find list of brand data
+func (s *CategoryService) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) ([]*model.Category, *errs.Errs) {
+	// return s.Repo.FindAll(query, orderby, page, pageSize)
+	return nil, nil
+}

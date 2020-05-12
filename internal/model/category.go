@@ -9,7 +9,7 @@ import (
 )
 
 type Category struct {
-	CatID     uint64    `json:"cat_id"`
+	CatID     uint64    `json:"cat_id" gorm:"PRIMARY_KEY"`
 	PID       uint64    `json:"pid" gorm:"Column:parent_cat_id"`
 	Name      string    `json:"name"`
 	Alias     string    `json:"alias"`
@@ -18,9 +18,9 @@ type Category struct {
 	IsShow    uint      `json:"is_show"`
 	IsParent  uint      `json:"is_parent"`
 	State     uint      `json:"state"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	IsDelete  uint      `json:"is_delete"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	IsDelete  uint      `json:"-"`
 }
 
 var category *Category
@@ -62,7 +62,7 @@ func (t *Category) Update() error {
 //IsCategoryHadSubChild - Check the Category Has Sub Child.
 func (t *Category) IsCategoryHadSubChild(id uint64) bool {
 	data, err := t.firstByMap("`parent_cat_id` = (?) AND `is_delete` = 2", []interface{}{id})
-	if err == nil && data != nil {
+	if err == nil && data != nil && data.CatID > 0 {
 		return true
 	}
 	return false
@@ -71,7 +71,7 @@ func (t *Category) IsCategoryHadSubChild(id uint64) bool {
 //IsCategoryNameExists - Check the category name is exists
 func (t *Category) IsCategoryNameExists(name string) bool {
 	data, err := t.firstByMap("`name` = (?) AND `is_delete` = 2", []interface{}{name})
-	if err == nil && data != nil {
+	if err == nil && data != nil && data.CatID > 0 {
 		return true
 	}
 	return false
@@ -90,6 +90,11 @@ func (t *Category) FindByPID(id uint64) (*Category, error) {
 //FindByName - Find Data By name
 func (t *Category) FindByName(name string) (*Category, error) {
 	return t.findByMap(map[string]interface{}{"name": name, "is_delete": 2})
+}
+
+//FindAll - Find all by query maps
+func (t *Category) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) ([]*Category, int, error) {
+	return t.findAllByMap("", query, orderby, page, pageSize)
 }
 
 //FindAllByIDs - Find List Data By Ids
@@ -125,6 +130,26 @@ func (t *Category) findByMap(wheremaps map[string]interface{}) (*Category, error
 		}
 	}
 	return &data, nil
+}
+
+func (t *Category) findAllByMap(fields string, query map[string]interface{}, orderBy string, page, pageSize uint) (data []*Category, count int, err error) {
+	offset := (page - 1) * pageSize
+	if len(fields) <= 0 {
+		fields = "*"
+	}
+	query["is_delete"] = 2
+	dbSelector := driver.DB.Table(t.TableName()).Select(fields).Where(query)
+	if err := dbSelector.Offset(offset).Limit(pageSize).Order(orderBy).Find(&data).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, count, err
+		}
+	}
+	if err := dbSelector.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
 }
 
 func (t *Category) findAllByQueryCondition(query string, args []interface{}) ([]*Category, error) {

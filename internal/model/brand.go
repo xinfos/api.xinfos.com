@@ -16,9 +16,9 @@ type Brand struct {
 	CatID     uint64    `json:"cat_id"`
 	SortOrder uint32    `json:"sort_order"`
 	IsShow    uint      `json:"is_show"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	IsDelete  uint      `json:"is_delete"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	IsDelete  uint      `json:"-"`
 }
 
 var brand *Brand
@@ -76,6 +76,11 @@ func (t *Brand) FindByName(name string) (*Brand, error) {
 	return t.findByMap(map[string]interface{}{"brand_name": name, "is_delete": 2})
 }
 
+//FindAll - Find all by query maps
+func (t *Brand) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) ([]*Brand, int, error) {
+	return t.findAllByMap("", query, orderby, page, pageSize)
+}
+
 //FindAllByIDs - Find List Data By Ids
 func (t *Brand) FindAllByIDs(ids []uint64) ([]*Brand, error) {
 	return t.findAllByQueryCondition("`brand_id` in (?) AND `is_delete` = 2", []interface{}{ids})
@@ -106,6 +111,25 @@ func (t *Brand) firstByMap(query string, args []interface{}) (*Brand, error) {
 	return &data, nil
 }
 
+func (t *Brand) findAllByMap(fields string, query map[string]interface{}, orderBy string, page, pageSize uint) (data []*Brand, count int, err error) {
+	offset := (page - 1) * pageSize
+	if len(fields) <= 0 {
+		fields = "*"
+	}
+	query["is_delete"] = 2
+	dbSelector := driver.DB.Table(t.TableName()).Select(fields).Where(query)
+	if err := dbSelector.Offset(offset).Limit(pageSize).Order(orderBy).Find(&data).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, count, err
+		}
+	}
+	if err := dbSelector.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
+}
 func (t *Brand) findAllByQueryCondition(query string, args []interface{}) ([]*Brand, error) {
 	var data []*Brand
 	if err := driver.DB.Table(t.TableName()).Where(query, args...).Find(&data).Error; err != nil {

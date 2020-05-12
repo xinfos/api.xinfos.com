@@ -37,7 +37,7 @@ type listBrandRequest struct {
 	RequestID string `json:"request_id"`
 	CatID     uint64 `json:"cat_id"`
 	BrandName string `json:"name"`
-	PageNo    uint   `json:"page_no"`
+	PageNo    uint   `json:"page_no" binding:"required"`
 	PageSize  uint   `json:"page_size"`
 }
 
@@ -134,4 +134,24 @@ func ListBrand(c *gin.Context) {
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
+
+	//assemble query condition
+	query := make(map[string]interface{}, 2)
+	if req.CatID > 0 {
+		query["cat_id"] = req.CatID
+	}
+	if len(req.BrandName) > 0 {
+		query["brand_name"] = req.BrandName
+	}
+	if req.PageSize <= 0 || req.PageSize > 20 {
+		req.PageSize = 20
+	}
+
+	data, err := service.NewBrandService().FindAll(query, "", req.PageNo, req.PageSize)
+	if err != nil {
+		api.JSON(c, err)
+		return
+	}
+	api.JSON(c, errs.ErrSuccess, data)
+	return
 }

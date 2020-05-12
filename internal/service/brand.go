@@ -37,3 +37,8 @@ func (s *BrandService) Update(m *model.Brand) *errs.Errs {
 func (s *BrandService) FindByID(id uint64) (*model.Brand, *errs.Errs) {
 	return s.Repo.FindByID(id)
 }
+
+//FindAll - Find list of brand data
+func (s *BrandService) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) (*repository.BrandList, *errs.Errs) {
+	return s.Repo.FindAll(query, orderby, page, pageSize)
+}

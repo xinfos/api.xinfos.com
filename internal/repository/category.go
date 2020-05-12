@@ -25,7 +25,7 @@ func (repo *CategoryRepository) Create(m *model.Category) (uint64, *errs.Errs) {
 	//1.Check that the pid is normal, 10000 is the top-level category ID
 	if m.PID != 10000 {
 		parent, _ := model.CategoryModel().FindByID(m.PID)
-		if parent == nil {
+		if parent == nil || parent.CatID <= 0 {
 			return 0, errs.ErrCatParentIsNotFound
 		}
 	}
@@ -46,7 +46,7 @@ func (repo *CategoryRepository) Create(m *model.Category) (uint64, *errs.Errs) {
 func (repo *CategoryRepository) Delete(id uint64) *errs.Errs {
 	//1.Check if the category is exists.
 	m, err := model.CategoryModel().FindByID(id)
-	if err != nil {
+	if err != nil || m == nil || m.CatID <= 0 {
 		return errs.ErrCatDeleteIsNotFound
 	}
 	//2.Check is there a subcategory.
@@ -68,7 +68,8 @@ func (repo *CategoryRepository) Update(m *model.Category) *errs.Errs {
 		return errs.ErrCatUpdateIsNotFound
 	}
 	//2.Check if the category name already exists.
-	if m.IsCategoryNameExists(m.Name) {
+	c, _ := m.FindByName(m.Name)
+	if c != nil && c.CatID != m.CatID {
 		return errs.ErrCatNameIsExists
 	}
 	//3.Update

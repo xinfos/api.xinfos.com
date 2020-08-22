@@ -14,6 +14,7 @@ type Category struct {
 	Name      string    `json:"name"`
 	Alias     string    `json:"alias"`
 	Desc      string    `json:"desc"`
+	Depth     uint      `json:"depth"`
 	ShowInNav uint      `json:"show_in_nav"`
 	IsShow    uint      `json:"is_show"`
 	IsParent  uint      `json:"is_parent"`

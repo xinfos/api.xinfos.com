@@ -53,6 +53,9 @@ func Load(g *gin.Engine) *gin.Engine {
 		backendAPI.POST("/product/update", backend.UpdateProduct)
 		backendAPI.POST("/product/get", backend.GetProduct)
 		backendAPI.POST("/product/list", backend.ListProduct)
+
+		//staff management api interface
+		backendAPI.POST("/staff/list", backend.ListStaff)
 	}
 
 	return g

@@ -35,9 +35,9 @@ type updateBrandRequest struct {
 
 type listBrandRequest struct {
 	RequestID string `json:"request_id"`
-	CatID     uint64 `json:"cat_id"`
+	CatID     uint64 `json:"cat_id" binding:"required"`
 	BrandName string `json:"name"`
-	PageNo    uint   `json:"page_no" binding:"required"`
+	PageNo    uint   `json:"page_no"`
 	PageSize  uint   `json:"page_size"`
 }
 
@@ -143,6 +143,11 @@ func ListBrand(c *gin.Context) {
 	if len(req.BrandName) > 0 {
 		query["brand_name"] = req.BrandName
 	}
+
+	if req.PageNo <= 0 {
+		req.PageNo = 1
+	}
+
 	if req.PageSize <= 0 || req.PageSize > 20 {
 		req.PageSize = 20
 	}

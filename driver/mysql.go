@@ -1,8 +1,8 @@
 package driver
 
 import (
-	"fmt"
 	"api.xinfos.com/configs"
+	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"

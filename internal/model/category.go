@@ -36,6 +36,22 @@ func (t *Category) TableName() string {
 	return `t_category`
 }
 
+//GetRootCategory 获取根分类
+func (t *Category) GetRootCategory() *Category {
+	return &Category{
+		CatID:     10000,
+		PID:       0,
+		Name:      "商品根分类",
+		Alias:     "商品根分类",
+		Desc:      "商品根分类",
+		Depth:     0,
+		ShowInNav: 0,
+		IsShow:    0,
+		IsParent:  1,
+		State:     1,
+	}
+}
+
 //Create - create user
 func (t *Category) Create() error {
 	if err := driver.DB.Table(t.TableName()).Create(&t).Error; err != nil {

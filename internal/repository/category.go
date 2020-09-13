@@ -23,18 +23,25 @@ func NewCategoryRepository() *CategoryRepository {
 //Create - Create a category
 func (repo *CategoryRepository) Create(m *model.Category) (uint64, *errs.Errs) {
 	//1.Check that the pid is normal, 10000 is the top-level category ID
-	if m.PID != 10000 {
-		parent, _ := model.CategoryModel().FindByID(m.PID)
+	var parent *model.Category
+	if m.PID == 10000 {
+		parent = m.GetRootCategory()
+	} else {
+		parent, _ = model.CategoryModel().FindByID(m.PID)
 		if parent == nil || parent.CatID <= 0 {
 			return 0, errs.ErrCatParentIsNotFound
 		}
 	}
+
 	//2.Check if the category name already exists.
 	if m.IsCategoryNameExists(m.Name) {
 		return 0, errs.ErrCatNameIsExists
 	}
 
-	//3.Create
+	//3.set current category depth
+	m.Depth = parent.Depth + 1
+
+	//4.Create
 	err := m.Create()
 	if err != nil {
 		return 0, errs.ErrCatCreateFail

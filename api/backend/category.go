@@ -4,8 +4,10 @@ import (
 	"api.xinfos.com/api"
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/service"
+	"api.xinfos.com/pkg/logger"
 	"api.xinfos.com/utils/errs"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type createCategoryRequest struct {
@@ -17,6 +19,7 @@ type createCategoryRequest struct {
 	ShowInNav uint   `json:"show_in_nav"`
 	IsShow    uint   `json:"is_show"`
 	IsParent  uint   `json:"is_parent"`
+	State     uint   `json:"state"`
 }
 type categoryRequest struct {
 	RequestID string `json:"request_id"`
@@ -49,8 +52,10 @@ func CreateCategory(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		api.JSON(c, errs.ErrParamVerify, nil)
+		logger.Error(err.Error())
 		return
 	}
+	logger.Info("request params", zap.Any("params", req))
 	id, err := service.NewCategoryService().Create(&model.Category{
 		PID:       req.PID,
 		Name:      req.Name,
@@ -59,6 +64,7 @@ func CreateCategory(c *gin.Context) {
 		ShowInNav: req.ShowInNav,
 		IsShow:    req.IsShow,
 		IsParent:  req.IsParent,
+		State:     req.State,
 		IsDelete:  2,
 	})
 	if err != nil {

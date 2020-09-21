@@ -11,6 +11,8 @@ import (
 type Brand struct {
 	BrandID   uint64    `json:"brand_id" gorm:"PRIMARY_KEY"`
 	BrandName string    `json:"brand_name"`
+	CnName    string    `json:"cn_name"`
+	EnName    string    `json:"en_name"`
 	BrandLogo string    `json:"brand_logo"`
 	BrandDesc string    `json:"brand_desc"`
 	CatID     uint64    `json:"cat_id"`

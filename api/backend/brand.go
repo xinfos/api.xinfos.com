@@ -35,7 +35,7 @@ type updateBrandRequest struct {
 
 type listBrandRequest struct {
 	RequestID string `json:"request_id"`
-	CatID     uint64 `json:"cat_id" binding:"required"`
+	CatID     uint64 `json:"cat_id"`
 	BrandName string `json:"name"`
 	PageNo    uint   `json:"page_no"`
 	PageSize  uint   `json:"page_size"`

@@ -8,6 +8,14 @@ import (
 	"api.xinfos.com/utils/errs"
 )
 
+//CategoryList - Category list strcut
+type CategoryList struct {
+	List            []*model.Category `json:"list"`
+	CurrentPageNo   uint              `json:"current_page_no"`
+	CurrentPageSize uint              `json:"current_page_size"`
+	TotalCount      int               `json:"total_count"`
+}
+
 //CategoryRepository - The Category Repository
 type CategoryRepository struct {
 	c *cache.CategoryCache
@@ -111,4 +119,19 @@ func (repo *CategoryRepository) FindAllByPID(id uint64) ([]*model.Category, *err
 		repo.c.SetAll(k, data)
 	}
 	return data, nil
+}
+
+//FindAll - Find category list by query
+func (repo *CategoryRepository) FindAll(query string, args []interface{}, orderby string, page, pageSize uint) (*CategoryList, *errs.Errs) {
+	data, count, err := model.CategoryModel().FindAllByQuery(query, args, orderby, "", page, pageSize)
+	if err != nil {
+		return nil, errs.ErrBrandCreateFail
+	}
+	l := &CategoryList{
+		List:            data,
+		CurrentPageNo:   page,
+		CurrentPageSize: pageSize,
+		TotalCount:      count,
+	}
+	return l, nil
 }

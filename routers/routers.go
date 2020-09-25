@@ -33,6 +33,7 @@ func Load(g *gin.Engine) *gin.Engine {
 		backendAPI.POST("/category/get", backend.GetCategory)
 		backendAPI.POST("/category/sub", backend.ListSubCategory)
 		backendAPI.POST("/category/attrs/get", backend.GetCategoryAttrs)
+		backendAPI.POST("/category/list", backend.ListCategory)
 
 		//Attrs management api interface
 		backendAPI.POST("/attr/create", backend.CreateAttr)

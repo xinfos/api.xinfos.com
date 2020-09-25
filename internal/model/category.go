@@ -114,6 +114,11 @@ func (t *Category) FindAll(query map[string]interface{}, orderby string, page, p
 	return t.findAllByMap("", query, orderby, page, pageSize)
 }
 
+//FindAllByQuery - Find all by query string
+func (t *Category) FindAllByQuery(query string, args []interface{}, orderby, groupby string, page, pageSize uint) ([]*Category, int, error) {
+	return t.findAllByQuery("", query, args, orderby, groupby, page, pageSize)
+}
+
 //FindAllByIDs - Find List Data By Ids
 func (t *Category) FindAllByIDs(ids []uint64) ([]*Category, error) {
 	return t.findAllByQueryCondition("`cat_id` in (?) AND `is_delete` = 2", []interface{}{ids})
@@ -177,4 +182,34 @@ func (t *Category) findAllByQueryCondition(query string, args []interface{}) ([]
 		}
 	}
 	return data, nil
+}
+
+func (t *Category) findAllByQuery(fields string, query string, args []interface{}, orderby, groupby string, page, pageSize uint) (data []*Category, count int, err error) {
+
+	ts := driver.DB.Table(t.TableName()).Where(query, args...)
+	if len(fields) > 0 {
+		ts = ts.Select(fields)
+	}
+
+	if len(orderby) > 0 {
+		ts = ts.Order(orderby)
+	}
+	if len(groupby) > 0 {
+		ts = ts.Group(groupby)
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+
+	if err := ts.Offset((page - 1) * pageSize).Limit(page).Find(&data).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := ts.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
 }

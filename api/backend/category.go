@@ -1,6 +1,9 @@
 package backend
 
 import (
+	"fmt"
+	"strings"
+
 	"api.xinfos.com/api"
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/service"
@@ -41,7 +44,7 @@ type updateCategoryRequest struct {
 type listCategoryRequest struct {
 	RequestID string `json:"request_id"`
 	CatID     uint64 `json:"cat_id"`
-	BrandName string `json:"name"`
+	Name      string `json:"name"`
 	PageNo    uint   `json:"page_no" binding:"required"`
 	PageSize  uint   `json:"page_size"`
 }
@@ -156,26 +159,33 @@ func ListSubCategory(c *gin.Context) {
 
 //ListCategory - Get all category List
 func ListCategory(c *gin.Context) {
-	var req listBrandRequest
+	var req listCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
 
-	//assemble query condition
-	query := make(map[string]interface{}, 2)
+	querys := []string{"is_delete = (?)"}
+	args := []interface{}{2}
+	//分类ID
 	if req.CatID > 0 {
-		query["cat_id"] = req.CatID
+		querys = append(querys, "cat_id = (?)")
+		args = append(args, req.CatID)
 	}
-	if len(req.BrandName) > 0 {
-		query["brand_name"] = req.BrandName
+	if len(req.Name) > 0 {
+		querys = append(querys, "name = (?)")
+		args = append(args, req.Name)
 	}
 	if req.PageSize <= 0 || req.PageSize > 20 {
 		req.PageSize = 20
 	}
-
-	data, err := service.NewCategoryService().FindAll(query, "", req.PageNo, req.PageSize)
+	query := ""
+	if len(querys) > 0 && len(args) > 0 {
+		query = strings.Join(querys, " AND ")
+	}
+	fmt.Println(query)
+	data, err := service.NewCategoryService().FindAll(query, args, "", req.PageNo, req.PageSize)
 	if err != nil {
 		api.JSON(c, err)
 		return

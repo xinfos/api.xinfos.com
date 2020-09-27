@@ -4,6 +4,7 @@ import (
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository"
 	"api.xinfos.com/utils/errs"
+	"github.com/gin-gonic/gin"
 )
 
 //CategoryService - Category Service
@@ -46,4 +47,9 @@ func (s *CategoryService) FindAllByPID(id uint64) ([]*model.Category, *errs.Errs
 //FindAll - Find list of brand data
 func (s *CategoryService) FindAll(query string, args []interface{}, orderby string, page, pageSize uint) (*repository.CategoryList, *errs.Errs) {
 	return s.Repo.FindAll(query, args, orderby, page, pageSize)
+}
+
+//SearchByKeyword - Search Category by keyword
+func (s *CategoryService) SearchByKeyword(c *gin.Context, keywords string) {
+	return s.Repo.SearchByKeyword(keywords)
 }

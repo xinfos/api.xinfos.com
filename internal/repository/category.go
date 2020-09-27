@@ -135,3 +135,8 @@ func (repo *CategoryRepository) FindAll(query string, args []interface{}, orderb
 	}
 	return l, nil
 }
+
+//SearchByKeyword - Search category by keyword
+func (repo *CategoryRepository) SearchByKeyword(keyword string) (*model.Category, *errs.Errs) {
+
+}

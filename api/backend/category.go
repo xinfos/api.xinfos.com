@@ -49,6 +49,11 @@ type listCategoryRequest struct {
 	PageSize  uint   `json:"page_size"`
 }
 
+type searchCategoryRequest struct {
+	RequestID string `json:"request_id"`
+	Keyword   string `json:"keyword" binding:"required"`
+}
+
 //CreateCategory - create new category
 func CreateCategory(c *gin.Context) {
 	var req createCategoryRequest
@@ -202,6 +207,18 @@ func GetCategoryAttrs(c *gin.Context) {
 		return
 	}
 	data, _ := service.NewProductService().BeforeCreateByCatID(req.CatID)
+	api.JSON(c, errs.ErrSuccess, data)
+	return
+}
+
+//SearchCategory - Search a Category
+func SearchCategory(c *gin.Context) {
+	var req searchCategoryRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		api.JSON(c, errs.ErrParamVerify, nil)
+		return
+	}
+	data, _ := service.NewCategoryService().Search(c, req.Keyword)
 	api.JSON(c, errs.ErrSuccess, data)
 	return
 }

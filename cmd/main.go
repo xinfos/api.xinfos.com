@@ -4,6 +4,7 @@ import (
 	"api.xinfos.com/driver"
 	"api.xinfos.com/pkg/logger"
 	"api.xinfos.com/routers"
+	"api.xinfos.com/utils/riot"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,8 @@ func main() {
 
 	driver.InitDB()
 	driver.InitRedis()
+
+	riot.InitEngine()
 
 	logger.InitLogger()
 

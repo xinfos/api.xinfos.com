@@ -50,6 +50,6 @@ func (s *CategoryService) FindAll(query string, args []interface{}, orderby stri
 }
 
 //SearchByKeyword - Search Category by keyword
-func (s *CategoryService) SearchByKeyword(c *gin.Context, keywords string) {
+func (s *CategoryService) SearchByKeyword(c *gin.Context, keywords string) (string, *errs.Errs) {
 	return s.Repo.SearchByKeyword(keywords)
 }

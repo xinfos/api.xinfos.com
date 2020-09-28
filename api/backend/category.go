@@ -218,7 +218,7 @@ func SearchCategory(c *gin.Context) {
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
-	data, _ := service.NewCategoryService().Search(c, req.Keyword)
+	data, _ := service.NewCategoryService().SearchByKeyword(c, req.Keyword)
 	api.JSON(c, errs.ErrSuccess, data)
 	return
 }

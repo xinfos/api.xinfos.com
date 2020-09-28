@@ -6,6 +6,13 @@ import (
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository/cache"
 	"api.xinfos.com/utils/errs"
+	"github.com/go-ego/riot"
+	"github.com/go-ego/riot/types"
+)
+
+var (
+	// searcher is coroutine safe
+	searcher = riot.Engine{}
 )
 
 //CategoryList - Category list strcut
@@ -100,10 +107,11 @@ func (repo *CategoryRepository) FindByID(id uint64) (*model.Category, *errs.Errs
 	if data != nil && data.CatID > 0 {
 		return data, nil
 	}
-	data, _ = model.CategoryModel().FindByID(id)
-	if data != nil && data.CatID == id {
-		repo.c.Set(data)
+	data, err := model.CategoryModel().FindByID(id)
+	if err != nil && data == nil && data.CatID != id {
+		return nil, nil
 	}
+	repo.c.Set(data)
 	return data, nil
 }
 
@@ -137,6 +145,13 @@ func (repo *CategoryRepository) FindAll(query string, args []interface{}, orderb
 }
 
 //SearchByKeyword - Search category by keyword
-func (repo *CategoryRepository) SearchByKeyword(keyword string) (*model.Category, *errs.Errs) {
-
+func (repo *CategoryRepository) SearchByKeyword(keyword string) (string, *errs.Errs) {
+	sea := searcher.Search(types.SearchReq{
+		Text: "zl",
+		RankOpts: &types.RankOpts{
+			OutputOffset: 0,
+			MaxOutputs:   100,
+		}})
+	fmt.Println("search response: ", sea, "; docs = ", sea.Docs)
+	return keyword, nil
 }

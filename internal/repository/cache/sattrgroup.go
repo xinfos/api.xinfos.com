@@ -1,10 +1,11 @@
 package cache
 
 import (
-	"api.xinfos.com/driver"
-	"api.xinfos.com/internal/model"
 	"fmt"
 	"time"
+
+	"api.xinfos.com/driver"
+	"api.xinfos.com/internal/model"
 
 	"github.com/go-redis/redis"
 	"github.com/vmihailenco/msgpack/v4"
@@ -26,8 +27,8 @@ func NewSAttrGroupCache() *SAttrGroupCache {
 	}
 }
 
-func (u *SAttrGroupCache) Get(id uint64) (m *model.SAttrGroup) {
-	key := fmt.Sprintf(cacheSAttrKey, id)
+func (u *SAttrGroupCache) Get(groupID uint64) (m *model.SAttrGroup) {
+	key := fmt.Sprintf(cacheSAttrKey, groupID)
 	v, err := u.Rds.Get(key).Bytes()
 	if err != nil {
 		return nil

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"api.xinfos.com/driver"
 
 	"github.com/jinzhu/gorm"
@@ -8,13 +10,12 @@ import (
 
 //SAttrGroup -
 type SAttrGroup struct {
-	ID        uint64 `json:"id"`
-	SGroupID  uint64 `json:"s_group_id"`
-	CatID     uint64 `json:"cat_id"`
-	Name      string `json:"name"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
-	IsDelete  uint   `json:"-"`
+	ID        uint64    `json:"id"`
+	CatID     uint64    `json:"cat_id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	IsDelete  uint      `json:"-"`
 }
 
 var sAttrGroup *SAttrGroup
@@ -35,18 +36,10 @@ func (t *SAttrGroup) Create() error {
 	return nil
 }
 
-//FindByID -
-func (t *SAttrGroup) FindByID(id uint64) (*SAttrGroup, error) {
+func (t *SAttrGroup) FindBySGroupID(id uint64) (*SAttrGroup, error) {
 	return t.findByMap(map[string]interface{}{
 		"id":        id,
 		"is_delete": 2,
-	})
-}
-
-func (t *SAttrGroup) FindBySGroupID(id uint64) (*SAttrGroup, error) {
-	return t.findByMap(map[string]interface{}{
-		"s_group_id": id,
-		"is_delete":  2,
 	})
 }
 
@@ -55,7 +48,11 @@ func (t *SAttrGroup) FindAllByCatID(id uint64) ([]*SAttrGroup, error) {
 }
 
 func (t *SAttrGroup) FindBySGroupIDs(ids []uint64) ([]*SAttrGroup, error) {
-	return t.findAllByQueryCondition("`s_group_id` in (?) AND `is_delete` = 2", []interface{}{ids})
+	return t.findAllByQueryCondition("`id` in (?) AND `is_delete` = 2", []interface{}{ids})
+}
+
+func (t *SAttrGroup) FindByCatIDAndName(catID uint64, name string) (*SAttrGroup, error) {
+	return t.findByMap(map[string]interface{}{"cat_id": catID, "name": name, "is_delete": 2})
 }
 
 func (t *SAttrGroup) findByMap(wheremaps map[string]interface{}) (*SAttrGroup, error) {

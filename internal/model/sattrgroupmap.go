@@ -53,7 +53,7 @@ func (t *SAttrGroupMap) FindAllByCatID(id uint64) ([]*SysSPUAttrGroup, error) {
 	var sAttrGroupMaps []*SysSPUAttrGroup
 	for _, v := range sysAttrGroups {
 		sAttrGroupMaps = append(sAttrGroupMaps, &SysSPUAttrGroup{
-			GroupID: v.SGroupID,
+			GroupID: v.ID,
 			Name:    v.Name,
 		})
 	}

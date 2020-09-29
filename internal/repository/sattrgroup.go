@@ -1,14 +1,14 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository/cache"
+	"api.xinfos.com/utils/errs"
 )
 
-//SAttrRepository - 系统属性仓库
+//SAttrGroupRepository - System defind Attribute Group Repository
 type SAttrGroupRepository struct {
 	c *cache.SAttrGroupCache
 }
@@ -21,13 +21,30 @@ func NewSAttrGroupRepository() *SAttrGroupRepository {
 }
 
 //Create - 根据model模型创建记录
-func (repo *SAttrGroupRepository) Create(m *model.SAttrGroup) (uint64, error) {
-	err := m.Create()
+func (repo *SAttrGroupRepository) Create(m *model.SAttrGroup) (uint64, *errs.Errs) {
+	if m.CatID <= 0 {
+		return 0, errs.ErrAttrGroupCreateFailCateNotFound
+	}
+	cate, err := model.CategoryModel().FindByID(m.CatID)
+	if err != nil || cate.CatID != m.CatID {
+		return 0, errs.ErrAttrGroupCreateFailCateNotFound
+	}
+
+	existsSAttrGroup, err := m.FindByCatIDAndName(m.CatID, m.Name)
 	if err != nil {
-		return 0, err
+		return 0, errs.ErrAttrGroupCreateFailCateNotFound
+	}
+	if existsSAttrGroup != nil || existsSAttrGroup.ID > 0 {
+		return existsSAttrGroup.ID, nil
+	}
+
+	m.IsDelete = 2
+	err = m.Create()
+	if err != nil {
+		return 0, errs.ErrAttrGroupCreateFail
 	}
 	if m == nil || m.ID <= 0 {
-		return 0, errors.New("create fail")
+		return 0, errs.ErrAttrGroupCreateFail
 	}
 	return m.ID, nil
 }
@@ -38,19 +55,7 @@ func (repo *SAttrGroupRepository) FindByID(id uint64) (*model.SAttrGroup, error)
 	if data != nil && data.ID > 0 {
 		return data, nil
 	}
-	data, _ = model.SAttrGroupModel().FindByID(id)
-	if data != nil && data.ID == id {
-		repo.c.Set(data)
-	}
-	return data, nil
-}
-
-func (repo *SAttrGroupRepository) FindBySGroupID(id uint64) (*model.SAttrGroup, error) {
-	data := repo.c.Get(id)
-	if data != nil && data.ID > 0 {
-		return data, nil
-	}
-	data, _ = model.SAttrGroupModel().FindByID(id)
+	data, _ = model.SAttrGroupModel().FindBySGroupID(id)
 	if data != nil && data.ID == id {
 		repo.c.Set(data)
 	}
@@ -71,7 +76,6 @@ func (repo *SAttrGroupRepository) FindAllByCatID(id uint64) ([]*model.SAttrGroup
 }
 
 func (repo *SAttrGroupRepository) FindBySGroupIDs(ids []uint64) ([]*model.SAttrGroup, error) {
-
 	data, _ := model.SAttrGroupModel().FindBySGroupIDs(ids)
 	if data != nil && len(data) > 0 {
 

@@ -8,9 +8,9 @@ type Errs struct {
 }
 
 //NewErrs - return customization error strcut
-func NewErrs(code int, errMsg ...string) *Errs {
+func NewErrs(code int, errMsg string) *Errs {
 	return &Errs{
 		ErrCode: code,
-		ErrMsg:  ErrorMsg[code],
+		ErrMsg:  errMsg,
 	}
 }

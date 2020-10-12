@@ -34,7 +34,8 @@ func (repo *SAttrGroupRepository) Create(m *model.SAttrGroup) (uint64, *errs.Err
 	if err != nil {
 		return 0, errs.ErrAttrGroupCreateFailCateNotFound
 	}
-	if existsSAttrGroup != nil || existsSAttrGroup.ID > 0 {
+
+	if existsSAttrGroup != nil && existsSAttrGroup.ID > 0 {
 		return existsSAttrGroup.ID, nil
 	}
 

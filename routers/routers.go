@@ -51,6 +51,9 @@ func Load(g *gin.Engine) *gin.Engine {
 		backendAPI.POST("/attrval/update", backend.DeleteAttr)
 		backendAPI.POST("/attrval/list", backend.DeleteAttr)
 
+		//AttrTemplate management api interface
+		backendAPI.POST("/attr/template/create", backend.CreateAttrTemplate)
+
 		//product management api interface
 		backendAPI.POST("/product/create", backend.CreateProduct)
 		backendAPI.POST("/product/delete", backend.DeleteProduct)

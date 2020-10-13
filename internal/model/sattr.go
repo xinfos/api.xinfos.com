@@ -9,9 +9,6 @@ import (
 //SAttr -
 type SAttr struct {
 	ID          uint64 `json:"id"`
-	SAttrID     uint64 `json:"s_attr_id"`
-	SGroupID    uint64 `json:"s_group_id"`
-	CatID       uint64 `json:"cat_id"`
 	Name        string `json:"name"`
 	FillType    uint   `json:"fill_type"`
 	IsRequired  uint   `json:"is_required"`
@@ -27,10 +24,12 @@ type SAttr struct {
 
 var sAttr *SAttr
 
+//SAttrModel 实例化 SAttr 模型
 func SAttrModel() *SAttr {
 	return sAttr
 }
 
+//TableName 返回对应的表名
 func (t *SAttr) TableName() string {
 	return `t_system_spu_attr`
 }
@@ -43,7 +42,7 @@ func (t *SAttr) Create() error {
 	return nil
 }
 
-//FindByID -
+//FindByID - 根据属性ID查询属性信息
 func (t *SAttr) FindByID(id uint64) (*SAttr, error) {
 	return t.findByMap(map[string]interface{}{
 		"id":        id,
@@ -55,8 +54,9 @@ func (t *SAttr) FindAllByCatID(id uint64) ([]*SAttr, error) {
 	return t.findAllByQueryCondition("`cat_id` in (?) AND `is_delete` = 2", []interface{}{id})
 }
 
+//FindAllBySAttrIDs - 根据属性ID，批量查询属性信息
 func (t *SAttr) FindAllBySAttrIDs(ids []uint64) ([]*SAttr, error) {
-	return t.findAllByQueryCondition("`s_attr_id` in (?) AND `is_delete` = 2", []interface{}{ids})
+	return t.findAllByQueryCondition("`id` in (?) AND `is_delete` = 2", []interface{}{ids})
 }
 
 func (t *SAttr) findByMap(wheremaps map[string]interface{}) (*SAttr, error) {

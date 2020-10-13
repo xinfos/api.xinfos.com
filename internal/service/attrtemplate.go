@@ -19,6 +19,6 @@ func NewAttrTemplateService() *AttrTemplateService {
 }
 
 //Create - Create a single attribute group
-func (s *AttrTemplateService) Create(m *model.SAttrTempalte, AttrGroupIDs []int64) (uint64, *errs.Errs) {
-	return s.Repo.Create(m, AttrGroupIDs)
+func (s *AttrTemplateService) Create(m *model.SAttrTempalte, generalAttrsGroupIDs, specAttrsIDs []uint64) (uint64, *errs.Errs) {
+	return s.Repo.Create(m, generalAttrsGroupIDs, specAttrsIDs)
 }

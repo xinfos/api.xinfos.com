@@ -9,11 +9,12 @@ import (
 )
 
 type createAttrTemplateRequest struct {
-	RequestID    string   `json:"request_id"`
-	Name         string   `json:"name" binding:"required"`
-	CatID        uint64   `json:"cat_id" binding:"required"`
-	State        uint8    `json:"state"`
-	AttrGroupIDs []uint64 `json:"attrgroups"`
+	RequestID            string   `json:"request_id"`
+	Name                 string   `json:"name" binding:"required"`
+	CatID                uint64   `json:"cat_id" binding:"required"`
+	State                uint8    `json:"state"`
+	SpecAttrs            []uint64 `json:"spec_attrs"`
+	GeneralAttrsGroupIDs []uint64 `json:"general_attrs_groups"`
 }
 
 //CreateAttrTemplate Create attribute template
@@ -30,7 +31,7 @@ func CreateAttrTemplate(c *gin.Context) {
 		Name:  req.Name,
 		CatID: req.CatID,
 		State: req.State,
-	}, AttrGroupIDs)
+	}, req.GeneralAttrsGroupIDs, req.SpecAttrs)
 
 	if errmsg != nil {
 		api.JSON(c, errmsg)

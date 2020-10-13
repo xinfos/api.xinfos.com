@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository/cache"
 	"api.xinfos.com/utils/errs"
@@ -19,7 +21,8 @@ func NewSAttrTemplateRepository() *SAttrTemplateRepository {
 }
 
 //Create - 根据model模型创建记录
-func (repo *SAttrTemplateRepository) Create(m *model.SAttrTempalte, AttrGroupIDs []uint64) (uint64, *errs.Errs) {
+func (repo *SAttrTemplateRepository) Create(m *model.SAttrTempalte, generalAttrsGroupIDs, specAttrsIDs []uint64) (uint64, *errs.Errs) {
+	//1.判断当前分类信息是否存在
 	if m.CatID <= 0 {
 		return 0, errs.ErrAttrGroupCreateFailCateNotFound
 	}
@@ -28,18 +31,50 @@ func (repo *SAttrTemplateRepository) Create(m *model.SAttrTempalte, AttrGroupIDs
 		return 0, errs.ErrAttrGroupCreateFailCateNotFound
 	}
 
-	existsSAttrGroup, err := m.FindByCatIDAndName(m.CatID, m.Name)
+	//2.判断当前模板名称是否存在
+	existsSAttrTemplate, err := m.FindByCatIDAndName(m.CatID, m.Name)
 	if err != nil {
 		return 0, errs.ErrAttrGroupCreateFailCateNotFound
 	}
+	if existsSAttrTemplate != nil && existsSAttrTemplate.ID > 0 {
+		return existsSAttrTemplate.ID, nil
+	}
 
-	if existsSAttrGroup != nil && existsSAttrGroup.ID > 0 {
-		return existsSAttrGroup.ID, nil
+	//3.判断规格属性是否存在
+	toBebindSpecAttrIDs := []uint64{}
+	if len(specAttrsIDs) > 0 {
+		existsSpecAttrs, err := model.SAttrModel().FindAllBySAttrIDs(specAttrsIDs)
+		if err != nil {
+
+		}
+		//将已存在的属性组进行绑定
+		if len(existsSpecAttrs) > 0 {
+			for _, v := range existsSpecAttrs {
+				toBebindSpecAttrIDs = append(toBebindSpecAttrIDs, v.ID)
+			}
+		}
+	}
+
+	//4.判断当前的属性组是否存在, 如果不存在则忽略
+	toBeBindAttrGroupIDs := []uint64{}
+	if len(generalAttrsGroupIDs) > 0 {
+		existsSAttrGroup, err := model.SAttrGroupModel().FindBySGroupIDs(generalAttrsGroupIDs)
+		if err != nil {
+			fmt.Println(err.Error())
+			return 0, nil
+		}
+		//将已存在的属性组进行绑定
+		if len(existsSAttrGroup) > 0 {
+			for _, v := range existsSAttrGroup {
+				toBeBindAttrGroupIDs = append(toBeBindAttrGroupIDs, v.ID)
+			}
+		}
 	}
 
 	m.IsDelete = 2
-	err = m.Create()
+	err = m.Create(toBeBindAttrGroupIDs, toBebindSpecAttrIDs)
 	if err != nil {
+		fmt.Println(err.Error())
 		return 0, errs.ErrAttrGroupCreateFail
 	}
 	if m == nil || m.ID <= 0 {

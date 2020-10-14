@@ -27,14 +27,14 @@ func SAttrTempalteModel() *SAttrTempalte {
 
 //TableName - Return the corresponding database table
 func (t *SAttrTempalte) TableName() string {
-	return `t_system_spu_attr_template`
+	return `t_sys_spu_template`
 }
 
 //Create - create user
-func (t *SAttrTempalte) Create(attrGroupIDs, specAttrIDs []uint64) error {
+func (t *SAttrTempalte) Create(attrGroupIDs, specAttrIDs []uint64, generalAttrIDs map[uint64][]uint64) error {
 
 	if len(attrGroupIDs) > 0 || len(specAttrIDs) > 0 {
-		return t.txCreate(attrGroupIDs, specAttrIDs)
+		return t.txCreate(attrGroupIDs, specAttrIDs, generalAttrIDs)
 	}
 	if err := driver.DB.Table(t.TableName()).Create(&t).Error; err != nil {
 		return err
@@ -43,7 +43,7 @@ func (t *SAttrTempalte) Create(attrGroupIDs, specAttrIDs []uint64) error {
 }
 
 //txCreate - 开启事务创建属性模板
-func (t *SAttrTempalte) txCreate(attrGroupIDs, specAttrIDs []uint64) error {
+func (t *SAttrTempalte) txCreate(attrGroupIDs, specAttrIDs []uint64, generalAttrIDs map[uint64][]uint64) error {
 	tx := driver.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -76,8 +76,25 @@ func (t *SAttrTempalte) txCreate(attrGroupIDs, specAttrIDs []uint64) error {
 			return err
 		}
 	}
+	//3.创建公共属性组和公共属性关系
+	if len(generalAttrIDs) > 0 {
+		groupAttrIdx := []Row{}
+		for i, v := range generalAttrIDs {
+			for _, vv := range v {
+				groupAttrIdx = append(groupAttrIdx, Row{
+					i,
+					vv,
+					2,
+				})
+			}
 
-	//3.创建模板和规格属性关系
+		}
+		if err := BatchInsertRawSQL(tx, sTemplateGroupAttrIdx.TableName(), []string{"s_group_id", "s_attr_id", "is_delete"}, groupAttrIdx); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+	//4.创建模板和规格属性关系
 	if len(specAttrIDs) > 0 {
 		templateSpecIdx := []Row{}
 		for _, v := range specAttrIDs {

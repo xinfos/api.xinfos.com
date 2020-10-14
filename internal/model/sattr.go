@@ -50,6 +50,7 @@ func (t *SAttr) FindByID(id uint64) (*SAttr, error) {
 	})
 }
 
+//FindAllByCatID 根据分类ID相关属性
 func (t *SAttr) FindAllByCatID(id uint64) ([]*SAttr, error) {
 	return t.findAllByQueryCondition("`cat_id` in (?) AND `is_delete` = 2", []interface{}{id})
 }

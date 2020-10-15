@@ -24,7 +24,7 @@ type createCategoryRequest struct {
 	IsParent  uint   `json:"is_parent"`
 	State     uint   `json:"state"`
 }
-type categoryRequest struct {
+type getCategoryRequest struct {
 	RequestID string `json:"request_id"`
 	CatID     uint64 `json:"cat_id" binding:"required"`
 }
@@ -85,7 +85,7 @@ func CreateCategory(c *gin.Context) {
 
 //DeleteCategory - Delete category By BrandID
 func DeleteCategory(c *gin.Context) {
-	var req categoryRequest
+	var req getCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		api.JSON(c, errs.ErrParamVerify, nil)
@@ -130,7 +130,7 @@ func UpdateCategory(c *gin.Context) {
 
 //GetCategory - Get category By BrandID
 func GetCategory(c *gin.Context) {
-	var req categoryRequest
+	var req getCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		api.JSON(c, errs.ErrParamVerify, nil)
@@ -147,7 +147,7 @@ func GetCategory(c *gin.Context) {
 
 //ListSubCategory - Get all subcategory List By pid
 func ListSubCategory(c *gin.Context) {
-	var req categoryRequest
+	var req getCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		api.JSON(c, errs.ErrParamVerify, nil)

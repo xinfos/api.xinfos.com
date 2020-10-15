@@ -202,7 +202,7 @@ func (t *Category) findAllByQuery(fields string, query string, args []interface{
 		page = 1
 	}
 
-	if err := ts.Offset((page - 1) * pageSize).Limit(page).Find(&data).Error; err != nil {
+	if err := ts.Offset((page - 1) * pageSize).Limit(pageSize).Find(&data).Error; err != nil {
 		return nil, 0, err
 	}
 

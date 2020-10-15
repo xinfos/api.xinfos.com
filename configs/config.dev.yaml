@@ -1,0 +1,9 @@
+redis:
+  uri: redis://127.0.0.1:6379/
+  prefix: ""
+
+mysql:
+  uri: root:root@tcp(127.0.0.1)/shop_bee
+  host: 127.0.0.1
+  user: root
+  pass: root

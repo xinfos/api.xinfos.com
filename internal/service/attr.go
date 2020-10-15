@@ -23,6 +23,17 @@ func NewAttrService() *AttrService {
 // 	return s.Repo.Create(m)
 // }
 
+//FindByID - Find category by id
+func (s *AttrService) FindByID(id uint64) (*model.SAttr, *errs.Errs) {
+	return s.Repo.FindByID(id)
+}
+
+//FindAll 查询属性相关的属性列表
+func (s *AttrService) FindAll(query string, args []interface{}, orderby string, page, pageSize uint) (*repository.AttrList, *errs.Errs) {
+	return s.Repo.FindAll(query, args, orderby, page, pageSize)
+}
+
+//Query 根据具体条件查询相关属性信息
 func (s *AttrService) Query(query string) ([]*model.SAttrBlock, *errs.Errs) {
 	return s.Repo.Query(query)
 }

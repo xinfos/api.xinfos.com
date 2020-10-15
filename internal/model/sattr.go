@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"api.xinfos.com/driver"
 
 	"github.com/jinzhu/gorm"
@@ -17,8 +19,8 @@ type SAttr struct {
 	IsGeneric   uint   `json:"is_generic"`
 	IsSearching uint   `json:"is_searching"`
 	Segments    string `json:"segments"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	CreatedAt   string `json:"-"`
+	UpdatedAt   string `json:"-"`
 	IsDelete    uint   `json:"-"`
 }
 
@@ -69,6 +71,11 @@ func (t *SAttr) FindAllBySAttrName(name string) ([]*SAttr, error) {
 	return t.findAllByQueryCondition("`name` like (?) AND `is_delete` = 2", []interface{}{name})
 }
 
+//FindAllByQuery - Find all by query string
+func (t *SAttr) FindAllByQuery(query string, args []interface{}, orderby, groupBy string, page, pageSize uint) ([]*SAttr, int, error) {
+	return t.findAllByQuery("", query, args, orderby, groupBy, page, pageSize)
+}
+
 func (t *SAttr) findByMap(wheremaps map[string]interface{}) (*SAttr, error) {
 	var data SAttr
 	if err := driver.DB.Table(t.TableName()).Where(wheremaps).Find(&data).Error; err != nil {
@@ -87,4 +94,35 @@ func (t *SAttr) findAllByQueryCondition(query string, args []interface{}) ([]*SA
 		}
 	}
 	return data, nil
+}
+
+func (t *SAttr) findAllByQuery(fields string, query string, args []interface{}, orderby, groupBy string, page, pageSize uint) (data []*SAttr, count int, err error) {
+
+	ts := driver.DB.Table(t.TableName()).Where(query, args...)
+	if len(fields) > 0 {
+		ts = ts.Select(fields)
+	}
+
+	if len(orderby) > 0 {
+		ts = ts.Order(orderby)
+	}
+	if len(groupBy) > 0 {
+		ts = ts.Group(groupBy)
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+
+	fmt.Println(pageSize)
+	if err := ts.Offset((page - 1) * pageSize).Limit(pageSize).Find(&data).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := ts.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
 }

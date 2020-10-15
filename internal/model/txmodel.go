@@ -36,3 +36,12 @@ func BatchInsertRawSQL(db *gorm.DB, table string, columns []string, rows []Row) 
 	sql += strings.Join(values, ",")
 	return db.Exec(sql, args...).Error
 }
+
+//QueryArrayToString 将查询条件数组转换成查询字符串
+func QueryArrayToString(query []string) string {
+	queryStr := ""
+	if len(query) > 0 {
+		queryStr = strings.Join(query, " AND ")
+	}
+	return queryStr
+}

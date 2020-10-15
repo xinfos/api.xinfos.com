@@ -22,6 +22,11 @@ type SAttr struct {
 	IsDelete    uint   `json:"-"`
 }
 
+type SAttrBlock struct {
+	ID   uint64 `json:"attr_id"`
+	Name string `json:"attr_name"`
+}
+
 var sAttr *SAttr
 
 //SAttrModel 实例化 SAttr 模型
@@ -31,7 +36,7 @@ func SAttrModel() *SAttr {
 
 //TableName 返回对应的表名
 func (t *SAttr) TableName() string {
-	return `t_system_spu_attr`
+	return `t_sys_spu_attr`
 }
 
 //Create - create user
@@ -58,6 +63,10 @@ func (t *SAttr) FindAllByCatID(id uint64) ([]*SAttr, error) {
 //FindAllBySAttrIDs - 根据属性ID，批量查询属性信息
 func (t *SAttr) FindAllBySAttrIDs(ids []uint64) ([]*SAttr, error) {
 	return t.findAllByQueryCondition("`id` in (?) AND `is_delete` = 2", []interface{}{ids})
+}
+
+func (t *SAttr) FindAllBySAttrName(name string) ([]*SAttr, error) {
+	return t.findAllByQueryCondition("`name` like (?) AND `is_delete` = 2", []interface{}{name})
 }
 
 func (t *SAttr) findByMap(wheremaps map[string]interface{}) (*SAttr, error) {

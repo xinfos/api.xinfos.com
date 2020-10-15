@@ -2,6 +2,7 @@ package backend
 
 import (
 	"api.xinfos.com/api"
+	"api.xinfos.com/internal/service"
 	"api.xinfos.com/utils/errs"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +18,10 @@ type createAttrRequest struct {
 	IsGeneric   uint   `json:"is_generic"`
 	IsSearching uint   `json:"is_searching"`
 	Segments    string `json:"segments"`
+}
+
+type queryAttrRequest struct {
+	Search string `json:"search" binding:"required"`
 }
 
 //CreateAttr - create new category
@@ -65,4 +70,22 @@ func GetAttr(c *gin.Context) {
 //ListAttr - Get all category List
 func ListAttr(c *gin.Context) {
 
+}
+
+//QueryAttr - Query attr list
+func QueryAttr(c *gin.Context) {
+	var req queryAttrRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		api.JSON(c, errs.ErrParamVerify, nil)
+		return
+	}
+
+	searchRes, errmsg := service.NewAttrService().Query(req.Search)
+	if errmsg != nil {
+		api.JSON(c, errmsg)
+		return
+	}
+	api.JSON(c, errs.ErrSuccess, searchRes)
+	return
 }

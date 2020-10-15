@@ -44,6 +44,7 @@ func Load(g *gin.Engine) *gin.Engine {
 		backendAPI.POST("/attr/update", backend.UpdateAttr)
 		backendAPI.POST("/attr/get", backend.GetAttr)
 		backendAPI.POST("/attr/list", backend.ListAttr)
+		backendAPI.POST("/attr/query", backend.QueryAttr)
 
 		//AttrValues management api interface
 		backendAPI.POST("/attrval/create", backend.CreateAttr)

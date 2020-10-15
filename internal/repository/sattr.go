@@ -6,6 +6,7 @@ import (
 
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository/cache"
+	"api.xinfos.com/utils/errs"
 )
 
 //SAttrRepository - 系统属性仓库
@@ -66,5 +67,24 @@ func (repo *SAttrRepository) FindBySAttrIDs(ids []uint64) ([]*model.SAttr, error
 }
 
 func (repo *SAttrRepository) FindAll() (*model.SAttr, error) {
+	return nil, nil
+}
+
+//Query query attr
+func (repo *SAttrRepository) Query(query string) ([]*model.SAttrBlock, *errs.Errs) {
+	data, err := model.SAttrModel().FindAllBySAttrName(query)
+	if err != nil {
+		return nil, nil
+	}
+	sAttrsBlock := []*model.SAttrBlock{}
+	if data != nil && len(data) > 0 {
+		for _, v := range data {
+			sAttrsBlock = append(sAttrsBlock, &model.SAttrBlock{
+				ID:   v.ID,
+				Name: v.Name,
+			})
+		}
+		return sAttrsBlock, nil
+	}
 	return nil, nil
 }

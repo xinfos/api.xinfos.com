@@ -655,3 +655,27 @@
 00:02:00.303580 db@open done T·43.594303ms
 00:02:00.307632 db@close closing
 00:02:00.307842 db@close done T·197.351µs
+=============== Oct 16, 2020 (CST) ===============
+15:26:08.969496 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:26:08.970633 version@stat F·[] S·0B[] Sc·[]
+15:26:08.970660 db@open opening
+15:26:08.970760 journal@recovery F·1
+15:26:08.970896 journal@recovery recovering @118
+15:26:08.971290 version@stat F·[] S·0B[] Sc·[]
+15:26:09.014031 db@janitor F·4 G·2
+15:26:09.014073 db@janitor removing manifest-55
+15:26:09.014282 db@janitor removing journal-54
+15:26:09.014408 db@open done T·43.735784ms
+15:26:09.336047 db@close closing
+15:26:09.336147 db@close done T·99.207µs
+=============== Oct 16, 2020 (CST) ===============
+15:26:09.336468 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:26:09.336739 version@stat F·[] S·0B[] Sc·[]
+15:26:09.336768 db@open opening
+15:26:09.336873 journal@recovery F·1
+15:26:09.337066 journal@recovery recovering @120
+15:26:09.337380 version@stat F·[] S·0B[] Sc·[]
+15:26:09.377765 db@janitor F·2 G·0
+15:26:09.377806 db@open done T·41.020512ms
+15:26:09.379848 db@close closing
+15:26:09.379898 db@close done T·49.184µs

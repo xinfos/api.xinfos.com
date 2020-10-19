@@ -19,6 +19,15 @@ func Load(g *gin.Engine) *gin.Engine {
 	//backendAPI - Background service management interface
 	backendAPI := g.Group("/backend")
 	{
+		//shop management api interface
+		backendAPI.POST("/shop/create", backend.CreateShop)
+		backendAPI.POST("/shop/delete", backend.DeleteShop)
+		backendAPI.POST("/shop/update", backend.UpdateShop)
+		backendAPI.POST("/shop/dashboard", backend.DashboardShop)
+		backendAPI.POST("/shop/get", backend.GetShop)
+		backendAPI.POST("/shop/info", backend.InfoShop)
+		backendAPI.POST("/shop/list", backend.ListShop)
+
 		//brand management api interface
 		backendAPI.POST("/brand/create", backend.CreateBrand)
 		backendAPI.POST("/brand/delete", backend.DeleteBrand)

@@ -10,7 +10,7 @@ import (
 
 //Shop - Shop Model struct
 type Shop struct {
-	SID       uint64    `json:"sid" gorm:"PRIMARY_KEY"`
+	ID        uint64    `json:"shop_id"`
 	SellerID  uint64    `json:"seller_id"`
 	Name      string    `json:"name"`
 	Desc      string    `json:"desc"`
@@ -18,9 +18,9 @@ type Shop struct {
 	URL       string    `json:"url"`
 	CertType  uint      `json:"cert_type"`
 	State     uint      `json:"state"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	IsDelete  uint      `json:"is_delete"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	IsDelete  uint      `json:"-"`
 }
 
 var shop *Shop
@@ -45,7 +45,7 @@ func (t *Shop) Create() error {
 
 //Delete - Delete a record
 func (t *Shop) Delete() error {
-	if err := driver.DB.Table(t.TableName()).Where("s_id = (?)", t.SID).Update("is_delete", 1).Error; err != nil {
+	if err := driver.DB.Table(t.TableName()).Where("id = (?)", t.ID).Update("is_delete", 1).Error; err != nil {
 		return err
 	}
 	return nil
@@ -53,7 +53,7 @@ func (t *Shop) Delete() error {
 
 //Update - Update a record
 func (t *Shop) Update() error {
-	if err := driver.DB.Table(t.TableName()).Where("s_id = (?)", t.SID).Update(t).Error; err != nil {
+	if err := driver.DB.Table(t.TableName()).Where("id = (?)", t.ID).Update(t).Error; err != nil {
 		return err
 	}
 	return nil
@@ -62,7 +62,7 @@ func (t *Shop) Update() error {
 //IsBrandNameExists - Check the brand name is exists
 func (t *Shop) IsBrandNameExists(name string) bool {
 	data, err := t.firstByMap("`name` = (?) AND `is_delete` = 2", []interface{}{name})
-	if err == nil && data != nil && data.SID > 0 {
+	if err == nil && data != nil && data.ID > 0 {
 		return true
 	}
 	return false
@@ -70,12 +70,22 @@ func (t *Shop) IsBrandNameExists(name string) bool {
 
 //FindByID - Find Data By ID
 func (t *Shop) FindByID(id uint64) (*Shop, error) {
-	return t.findByMap(map[string]interface{}{"s_id": id, "is_delete": 2})
+	return t.findByMap(map[string]interface{}{"id": id, "is_delete": 2})
 }
 
 //FindByName - Find Data By name
 func (t *Shop) FindByName(name string) (*Shop, error) {
 	return t.findByMap(map[string]interface{}{"name": name, "is_delete": 2})
+}
+
+//FindByShopIDAndSellerID - Find shop by shop_id & seller_id
+func (t *Shop) FindByShopIDAndSellerID(id, sellerID uint64) (*Shop, error) {
+	return t.findByMap(map[string]interface{}{"id": id, "seller_id": sellerID, "is_delete": 2})
+}
+
+//FindBySellerID - Find shop by seller_id
+func (t *Shop) FindBySellerID(sellerID uint64) (*Shop, error) {
+	return t.findByMap(map[string]interface{}{"seller_id": sellerID, "is_delete": 2})
 }
 
 //FindAll - Find all by query maps
@@ -85,7 +95,12 @@ func (t *Shop) FindAll(query map[string]interface{}, orderby string, page, pageS
 
 //FindAllByIDs - Find List Data By Ids
 func (t *Shop) FindAllByIDs(ids []uint64) ([]*Shop, error) {
-	return t.findAllByQueryCondition("`s_id` in (?) AND `is_delete` = 2", []interface{}{ids})
+	return t.findAllByQueryCondition("`id` in (?) AND `is_delete` = 2", []interface{}{ids})
+}
+
+//FindAllByQuery - Find all by query string
+func (t *Shop) FindAllByQuery(query string, args []interface{}, orderby, groupBy string, page, pageSize uint) ([]*Shop, int, error) {
+	return t.findAllByQuery("", query, args, orderby, groupBy, page, pageSize)
 }
 
 func (t *Shop) findByMap(wheremaps map[string]interface{}) (*Shop, error) {
@@ -135,4 +150,34 @@ func (t *Shop) findAllByQueryCondition(query string, args []interface{}) ([]*Sho
 		}
 	}
 	return data, nil
+}
+
+func (t *Shop) findAllByQuery(fields string, query string, args []interface{}, orderby, groupBy string, page, pageSize uint) (data []*Shop, count int, err error) {
+
+	ts := driver.DB.Table(t.TableName()).Where(query, args...)
+	if len(fields) > 0 {
+		ts = ts.Select(fields)
+	}
+
+	if len(orderby) > 0 {
+		ts = ts.Order(orderby)
+	}
+	if len(groupBy) > 0 {
+		ts = ts.Group(groupBy)
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+
+	if err := ts.Offset((page - 1) * pageSize).Limit(pageSize).Find(&data).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := ts.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
 }

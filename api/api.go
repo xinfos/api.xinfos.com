@@ -24,7 +24,7 @@ func JSON(c *gin.Context, err *errs.Errs, data ...interface{}) {
 	}
 
 	responseData := data[0]
-	if data[0] == nil {
+	if data[0] == nil || err.ErrCode != 200 {
 		responseData = make([]interface{}, 0)
 	}
 	c.JSON(http.StatusOK, response{

@@ -13,6 +13,10 @@ type Shop struct {
 	ID        uint64    `json:"shop_id"`
 	SellerID  uint64    `json:"seller_id"`
 	Name      string    `json:"name"`
+	Type      uint      `json:"type" binding:"required"`
+	Location  string    `json:"location"`
+	Address   string    `json:"address"`
+	IsAgree   uint      `json:"is_agree" binding:"required"`
 	Desc      string    `json:"desc"`
 	Logo      string    `json:"logo"`
 	URL       string    `json:"url"`

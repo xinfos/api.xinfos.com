@@ -12,6 +12,10 @@ type createShopRequest struct {
 	RequestID string `json:"request_id"`
 	SellerID  uint64 `json:"seller_id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
+	Type      uint   `json:"type" binding:"required"`
+	Location  string `json:"location"`
+	Address   string `json:"address"`
+	IsAgree   uint   `json:"is_agree" binding:"required"`
 	Desc      string `json:"desc"`
 	Logo      string `json:"logo"`
 	URL       string `json:"url"`
@@ -23,6 +27,9 @@ type updateShopRequest struct {
 	ShopID    uint64 `json:"shop_id" binding:"required"`
 	SellerID  uint64 `json:"seller_id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
+	Type      uint   `json:"type" binding:"required"`
+	Location  string `json:"location"`
+	Address   string `json:"address"`
 	Desc      string `json:"desc"`
 	Logo      string `json:"logo"`
 	URL       string `json:"url"`
@@ -84,6 +91,10 @@ func CreateShop(c *gin.Context) {
 	data, errsmsg := service.NewShopService().Create(&model.Shop{
 		SellerID: req.SellerID,
 		Name:     req.Name,
+		Type:     req.Type,
+		Location: req.Location,
+		Address:  req.Address,
+		IsAgree:  req.IsAgree,
 		Desc:     req.Desc,
 		Logo:     req.Logo,
 		URL:      req.URL,
@@ -174,6 +185,9 @@ func UpdateShop(c *gin.Context) {
 		ID:       req.ShopID,
 		SellerID: req.SellerID,
 		Name:     req.Name,
+		Type:     req.Type,
+		Location: req.Location,
+		Address:  req.Address,
 		Desc:     req.Desc,
 		Logo:     req.Logo,
 		URL:      req.URL,

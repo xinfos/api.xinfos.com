@@ -38,19 +38,7 @@ func (s *ShopStaffService) FindByID(id uint64) (*model.ShopStaff, *errs.Errs) {
 	return s.Repo.FindByID(id)
 }
 
-type ShopStaffList struct {
-	List       []*model.ShopStaff `json:"list"`
-	TotalCount int                `json:"total_count"`
-}
-
 //FindAll - Find list of shop employee data
-func (s *ShopStaffService) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) (*ShopStaffList, *errs.Errs) {
-	data, count, err := s.Repo.FindAll(query, orderby, page, pageSize)
-	if err != nil {
-		return nil, err
-	}
-	return &ShopStaffList{
-		List:       data,
-		TotalCount: count,
-	}, nil
+func (s *ShopStaffService) FindAll(query string, args []interface{}, orderby string, page, pageSize uint) (*repository.ShopStaffList, *errs.Errs) {
+	return s.Repo.FindAll(query, args, orderby, page, pageSize)
 }

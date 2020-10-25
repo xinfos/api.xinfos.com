@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"api.xinfos.com/internal/model"
 	"api.xinfos.com/internal/repository"
 	"api.xinfos.com/utils/errs"
@@ -34,13 +36,11 @@ func (s *ShopService) Dashboard(sellerID uint64) (*ShopDashboard, *errs.Errs) {
 	if errmsg != nil {
 		return nil, errmsg
 	}
+	fmt.Println(dashboard.Info.ID)
 	if dashboard.Info.ID <= 0 {
-		return nil, nil
+		return nil, errs.ErrShopNotFound
 	}
-	dashboard.Statistis, errmsg = s.StatistisRepo.FindByShopID(dashboard.Info.ID)
-	if errmsg != nil {
-		return nil, errmsg
-	}
+	dashboard.Statistis, _ = s.StatistisRepo.FindByShopID(dashboard.Info.ID)
 
 	return dashboard, nil
 }

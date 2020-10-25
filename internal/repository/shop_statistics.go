@@ -104,7 +104,7 @@ func (repo *ShopStatisticsRepository) FindByShopID(shopID uint64) (*model.ShopSt
 	}
 	data, err := model.ShopStatisticsModel().FindByShopID(shopID)
 	if err != nil && data == nil && data.ShopID != shopID {
-		return nil, nil
+		return nil, errs.ErrShopStatisticsNotFound
 	}
 	repo.c.Set(k, data)
 	return data, nil

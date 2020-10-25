@@ -30,6 +30,15 @@ func NewShopRepository() *ShopRepository {
 
 //Create 创建店铺
 func (repo *ShopRepository) Create(m *model.Shop) (uint64, *errs.Errs) {
+	//1.检查用户是否已经创建过店铺
+	sellerIsHasShop, err := m.FindBySellerID(m.SellerID)
+	if err != nil {
+		return 0, errs.ErrDBQuery
+	}
+	if sellerIsHasShop != nil && sellerIsHasShop.ID > 0 {
+		return 0, errs.ErrShopUserHasSaleShop
+	}
+
 	//1.检查店铺名称是否已存在
 	isExistsShop, err := m.FindByName(m.Name)
 	if err == nil && isExistsShop != nil && isExistsShop.ID > 0 {
@@ -127,7 +136,7 @@ func (repo *ShopRepository) FindBySellerID(sellerID uint64) (*model.Shop, *errs.
 	}
 	data, err := model.ShopModel().FindBySellerID(sellerID)
 	if err != nil && data == nil && data.SellerID != sellerID {
-		return nil, nil
+		return nil, errs.ErrShopNotFound
 	}
 	repo.c.Set(k, data)
 	return data, nil

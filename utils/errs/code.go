@@ -2,10 +2,10 @@ package errs
 
 var (
 	ErrSuccess                         = NewErrs(200, "请求成功")
-	ErrInternal                        = NewErrs(500, "抱歉，提交参数错误.")
-	ErrDBQuery                         = NewErrs(500, "抱歉，服务内部错误.")
-	ErrParamInvalid                    = NewErrs(500, "抱歉，数据内部错误.")
-	ErrParamVerify                     = NewErrs(500, "抱歉，提交参数不合法.")
+	ErrParamInvalid                    = NewErrs(100201, "抱歉，提交参数无效.")
+	ErrParamVerify                     = NewErrs(100202, "抱歉，提交参数不合法.")
+	ErrInternal                        = NewErrs(100500, "抱歉，服务内部错误.")
+	ErrDBQuery                         = NewErrs(100501, "抱歉，服务内部数据错误.")
 	ErrCatIsNotFound                   = NewErrs(120001, "抱歉，分类不存在.")
 	ErrCatParentIsNotFound             = NewErrs(120002, "抱歉，父级分类不存在，请重新确认!~")
 	ErrCatNameIsExists                 = NewErrs(120003, "抱歉，当前分类名称已存在, 请重新输入!~")
@@ -35,6 +35,7 @@ var (
 	ErrShopUpdateFail                  = NewErrs(160003, "抱歉，店铺更新失败!~")
 	ErrShopNameIsExists                = NewErrs(160004, "抱歉，店铺名称已存在，请换一个名称重试!~")
 	ErrShopNotFound                    = NewErrs(160005, "抱歉，抱歉没有找到相关的店铺信息")
+	ErrShopUserHasSaleShop             = NewErrs(160006, "抱歉，您已经拥有一家正在营业的店铺!~")
 	ErrShopStatisticsCreateFail        = NewErrs(170001, "抱歉，创建失败!~")
 	ErrShopStatisticsDeleteFail        = NewErrs(170002, "抱歉，删除失败!~")
 	ErrShopStatisticsUpdateFail        = NewErrs(170003, "抱歉，更新失败!~")

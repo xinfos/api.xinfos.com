@@ -23,10 +23,11 @@ func JSON(c *gin.Context, err *errs.Errs, data ...interface{}) {
 		logger.Error(err.ErrMsg)
 	}
 
-	responseData := data[0]
-	if data[0] == nil || err.ErrCode != 200 {
-		responseData = make([]interface{}, 0)
+	var responseData interface{}
+	if len(data) > 0 {
+		responseData = data[0]
 	}
+
 	c.JSON(http.StatusOK, response{
 		Code: err.ErrCode,
 		Msg:  err.ErrMsg,

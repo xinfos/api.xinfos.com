@@ -1,10 +1,11 @@
 package cache
 
 import (
-	"api.xinfos.com/driver"
-	"api.xinfos.com/internal/model"
 	"fmt"
 	"time"
+
+	"api.xinfos.com/driver"
+	"api.xinfos.com/internal/model"
 
 	"github.com/go-redis/redis"
 	"github.com/vmihailenco/msgpack/v4"
@@ -50,6 +51,14 @@ func (u *CategoryCache) Set(m *model.Category) bool {
 		return false
 	}
 	return isOk
+}
+
+func (u *CategoryCache) Del(id uint64) {
+	key := fmt.Sprintf(cacheCategoryKey, id)
+	_, err := u.Rds.Del(key).Result()
+	if err != nil {
+		//TODO: log
+	}
 }
 
 func (u *CategoryCache) GetAll(key string) (m []*model.Category) {

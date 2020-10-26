@@ -38,7 +38,7 @@ type updateCategoryRequest struct {
 	Desc      string `json:"desc"`
 	ShowInNav uint   `json:"show_in_nav"`
 	IsShow    uint   `json:"is_show"`
-	IsParent  uint   `json:"is_parent"`
+	State     uint   `json:"state"`
 }
 
 type listCategoryRequest struct {
@@ -105,6 +105,7 @@ func UpdateCategory(c *gin.Context) {
 	var req updateCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
@@ -116,7 +117,6 @@ func UpdateCategory(c *gin.Context) {
 		Desc:      req.Desc,
 		ShowInNav: req.ShowInNav,
 		IsShow:    req.IsShow,
-		IsParent:  req.IsParent,
 		IsDelete:  2,
 	})
 

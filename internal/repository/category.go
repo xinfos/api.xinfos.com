@@ -91,13 +91,30 @@ func (repo *CategoryRepository) Update(m *model.Category) *errs.Errs {
 	}
 	//2.Check if the category name already exists.
 	c, _ := m.FindByName(m.Name)
-	if c != nil && c.CatID != m.CatID {
+	if c != nil && c.CatID > 0 && c.CatID != m.CatID {
 		return errs.ErrCatNameIsExists
 	}
-	//3.Update
-	if err = m.Update(); err != nil {
+	//3.Check the data that needs to be updated
+	if data.Name != m.Name {
+		data.Name = m.Name
+	}
+	if data.Alias != m.Alias {
+		data.Alias = m.Alias
+	}
+	if data.Desc != m.Desc {
+		data.Desc = m.Desc
+	}
+	if data.State != m.State {
+		data.State = m.State
+	}
+
+	fmt.Println(data)
+	fmt.Println(m)
+	//4.Update
+	if err = data.Update(); err != nil {
 		return errs.ErrCatUpdateFail
 	}
+	repo.c.Del(data.CatID)
 	return nil
 }
 

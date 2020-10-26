@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"api.xinfos.com/driver"
 
 	"github.com/jinzhu/gorm"
@@ -89,6 +91,11 @@ func (t *ShopStaff) FindAllByName(name string, shopID uint64) ([]*ShopStaff, err
 	return t.findAllByQueryCondition("`name` = (?) AND `shop_id` = (?) AND `is_delete` = 2", []interface{}{name, shopID})
 }
 
+//FindAllByQuery - Find all by query string
+func (t *ShopStaff) FindAllByQuery(query string, args []interface{}, orderby, groupBy string, page, pageSize uint) ([]*ShopStaff, int, error) {
+	return t.findAllByQuery("", query, args, orderby, groupBy, page, pageSize)
+}
+
 func (t *ShopStaff) firstByMap(query string, args []interface{}) (*ShopStaff, error) {
 	var data ShopStaff
 	if err := driver.DB.Table(t.TableName()).Where(query, args...).First(&data).Error; err != nil {
@@ -132,6 +139,37 @@ func (t *ShopStaff) findAllByQueryMap(fields string, query map[string]interface{
 		}
 	}
 	if err := dbSelector.Count(&count).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, 0, err
+		}
+	}
+	return data, count, nil
+}
+
+func (t *ShopStaff) findAllByQuery(fields string, query string, args []interface{}, orderby, groupBy string, page, pageSize uint) (data []*ShopStaff, count int, err error) {
+
+	ts := driver.DB.Table(t.TableName()).Where(query, args...)
+	if len(fields) > 0 {
+		ts = ts.Select(fields)
+	}
+
+	if len(orderby) > 0 {
+		ts = ts.Order(orderby)
+	}
+	if len(groupBy) > 0 {
+		ts = ts.Group(groupBy)
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+
+	fmt.Println(pageSize)
+	if err := ts.Offset((page - 1) * pageSize).Limit(pageSize).Find(&data).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := ts.Count(&count).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return nil, 0, err
 		}

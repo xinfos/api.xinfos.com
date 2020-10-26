@@ -6,6 +6,14 @@ import (
 	"api.xinfos.com/utils/errs"
 )
 
+//ShopStaffList 员工列表
+type ShopStaffList struct {
+	List            []*model.ShopStaff `json:"list"`
+	CurrentPageNo   uint               `json:"current_page_no"`
+	CurrentPageSize uint               `json:"current_page_size"`
+	TotalCount      int                `json:"total_count"`
+}
+
 //ShopStaffRepository - Shop Staff Repository
 type ShopStaffRepository struct {
 	c *cache.ShopStaffCache
@@ -80,10 +88,16 @@ func (repo *ShopStaffRepository) FindByID(id uint64) (*model.ShopStaff, *errs.Er
 }
 
 //FindAll - Query shop employee
-func (repo *ShopStaffRepository) FindAll(query map[string]interface{}, orderby string, page, pageSize uint) ([]*model.ShopStaff, int, *errs.Errs) {
-	data, count, err := model.ShopStaffModel().FindAll(query, orderby, page, pageSize)
+func (repo *ShopStaffRepository) FindAll(query string, args []interface{}, orderby string, page, pageSize uint) (*ShopStaffList, *errs.Errs) {
+	data, count, err := model.ShopStaffModel().FindAllByQuery(query, args, orderby, "", page, pageSize)
 	if err != nil {
-		return nil, 0, nil
+		return nil, errs.ErrBrandCreateFail
 	}
-	return data, count, nil
+	l := &ShopStaffList{
+		List:            data,
+		CurrentPageNo:   page,
+		CurrentPageSize: pageSize,
+		TotalCount:      count,
+	}
+	return l, nil
 }

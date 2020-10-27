@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 
 	"api.xinfos.com/internal/model"
@@ -29,15 +28,66 @@ func NewSAttrRepository() *SAttrRepository {
 }
 
 //Create - 根据model模型创建记录
-func (repo *SAttrRepository) Create(m *model.SAttr) (uint64, error) {
+func (repo *SAttrRepository) Create(m *model.SAttr) (uint64, *errs.Errs) {
+	//1.如果是属性为数值类型，则单位为比填项
+	if m.IsNumeric == 1 && len(m.Unit) <= 0 {
+		return 0, errs.ErrAttrUnitIsRequired
+	}
+	//2.检查属性名是否已存在
+	if m.IsSAttrNameExists(m.Name) {
+		return 0, errs.ErrAttrNameIsExists
+	}
+	//3.创建
 	err := m.Create()
 	if err != nil {
-		return 0, err
+		return 0, errs.ErrDBQuery
 	}
 	if m == nil || m.ID <= 0 {
-		return 0, errors.New("create fail")
+		return 0, errs.ErrAttrCreateFail
 	}
 	return m.ID, nil
+}
+
+//Delete - Delete a attr
+func (repo *SAttrRepository) Delete(id uint64) *errs.Errs {
+	//1.检查当前属性是否存在
+	m, err := model.SAttrModel().FindByID(id)
+	if err != nil || m == nil || m.ID <= 0 {
+		return errs.ErrAttrNotFound
+	}
+	//2.检查目前属性是否有在使用，如果有属性在用则不能删除
+	if model.ProductModel().IsBrandHasProduct(id) {
+		return errs.ErrBrandDeleteFailHasProduct
+	}
+
+	//3.删除
+	if err := m.Delete(); err != nil {
+		return errs.ErrAttrDeleteFail
+	}
+	return nil
+}
+
+//Update - Update a attr
+func (repo *SAttrRepository) Update(m *model.SAttr) *errs.Errs {
+	//1.检查当前属性是否存在
+	data, err := m.FindByID(m.ID)
+	if err != nil {
+		return errs.ErrDBQuery
+	}
+	if data == nil || data.ID <= 0 || m.ID != data.ID {
+		return errs.ErrAttrNotFound
+	}
+
+	//2.判断是否更新了属性名称，如果更新了需要检查下当前新的属性名是否已存在
+	if m.Name != data.Name && m.IsSAttrNameExists(m.Name) {
+		return errs.ErrAttrNameIsExists
+	}
+
+	//3.更新
+	if err := m.Update(); err != nil {
+		return errs.ErrAttrUpdateFail
+	}
+	return nil
 }
 
 //FindByID - 根据ID获取信息

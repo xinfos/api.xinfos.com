@@ -105,7 +105,6 @@ func UpdateCategory(c *gin.Context) {
 	var req updateCategoryRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println(err.Error())
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
@@ -117,9 +116,9 @@ func UpdateCategory(c *gin.Context) {
 		Desc:      req.Desc,
 		ShowInNav: req.ShowInNav,
 		IsShow:    req.IsShow,
+		State:     req.State,
 		IsDelete:  2,
 	})
-
 	if err != nil {
 		api.JSON(c, err)
 		return

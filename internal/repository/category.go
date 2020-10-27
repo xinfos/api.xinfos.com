@@ -94,22 +94,27 @@ func (repo *CategoryRepository) Update(m *model.Category) *errs.Errs {
 	if c != nil && c.CatID > 0 && c.CatID != m.CatID {
 		return errs.ErrCatNameIsExists
 	}
-	//3.Check the data that needs to be updated
+	//3.如果需要变更父级分类ID，需要检查当前分类下是否高级分类ID
+	if data.PID != m.PID {
+		fmt.Println("===111111==")
+	}
+	//4.Check the data that needs to be updated
 	if data.Name != m.Name {
 		data.Name = m.Name
 	}
+
 	if data.Alias != m.Alias {
 		data.Alias = m.Alias
 	}
+
 	if data.Desc != m.Desc {
 		data.Desc = m.Desc
 	}
+
 	if data.State != m.State {
 		data.State = m.State
 	}
 
-	fmt.Println(data)
-	fmt.Println(m)
 	//4.Update
 	if err = data.Update(); err != nil {
 		return errs.ErrCatUpdateFail

@@ -9,9 +9,19 @@ import (
 )
 
 type createAttrRequest struct {
-	SGroupID    uint64 `json:"s_group_id"`
-	CatID       uint64 `json:"cat_id"`
-	Name        string `json:"name"`
+	Name        string `json:"name" binding:"required"`
+	FillType    uint   `json:"fill_type"`
+	IsRequired  uint   `json:"is_required"`
+	IsNumeric   uint   `json:"is_numeric"`
+	Unit        string `json:"unit"`
+	IsGeneric   uint   `json:"is_generic"`
+	IsSearching uint   `json:"is_searching"`
+	Segments    string `json:"segments"`
+}
+
+type updateAttrRequest struct {
+	AttrID      uint64 `json:"attr_id" binding:"required"`
+	Name        string `json:"name" binding:"required"`
 	FillType    uint   `json:"fill_type"`
 	IsRequired  uint   `json:"is_required"`
 	IsNumeric   uint   `json:"is_numeric"`
@@ -45,34 +55,72 @@ func CreateAttr(c *gin.Context) {
 		api.JSON(c, errs.ErrParamVerify, nil)
 		return
 	}
-	// id, err := service.NewAttrService().Create(&model.SAttr{
-	// 	SGroupID:    req.SGroupID,
-	// 	CatID:       req.SGroupID,
-	// 	Name:        req.Name,
-	// 	FillType:    req.FillType,
-	// 	IsRequired:  req.IsRequired,
-	// 	IsNumeric:   req.IsNumeric,
-	// 	Unit:        req.Unit,
-	// 	IsGeneric:   req.IsGeneric,
-	// 	IsSearching: req.IsSearching,
-	// 	Segments:    req.Segments,
-	// })
-	// if err != nil {
-	// 	api.JSON(c, err)
-	// 	return
-	// }
-	api.JSON(c, errs.ErrSuccess, map[string]uint64{"cat_id": 0})
+
+	data, err := service.NewAttrService().Create(&model.SAttr{
+		Name:        req.Name,
+		FillType:    req.FillType,
+		IsRequired:  req.IsRequired,
+		IsNumeric:   req.IsNumeric,
+		Unit:        req.Unit,
+		IsGeneric:   req.IsGeneric,
+		IsSearching: req.IsSearching,
+		Segments:    req.Segments,
+		IsDelete:    2,
+	})
+
+	if err != nil {
+		api.JSON(c, err)
+		return
+	}
+	api.JSON(c, errs.ErrSuccess, map[string]uint64{"attr_id": data})
 	return
 }
 
 //DeleteAttr - Delete category By BrandID
 func DeleteAttr(c *gin.Context) {
+	var req getAttrRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		api.JSON(c, errs.ErrParamVerify, nil)
+		return
+	}
 
+	errsmsg := service.NewAttrService().Delete(req.AttrID)
+	if errsmsg != nil {
+		api.JSON(c, errsmsg)
+		return
+	}
+	api.JSON(c, errs.ErrSuccess, map[string]uint64{"attr_id": req.AttrID})
+	return
 }
 
 //UpdateAttr - Update category attr By BrandID
 func UpdateAttr(c *gin.Context) {
+	var req updateAttrRequest
 
+	if err := c.ShouldBindJSON(&req); err != nil {
+		api.JSON(c, errs.ErrParamVerify, nil)
+		return
+	}
+
+	err := service.NewAttrService().Update(&model.SAttr{
+		ID:          req.AttrID,
+		Name:        req.Name,
+		FillType:    req.FillType,
+		IsRequired:  req.IsRequired,
+		IsNumeric:   req.IsNumeric,
+		Unit:        req.Unit,
+		IsGeneric:   req.IsGeneric,
+		IsSearching: req.IsSearching,
+		Segments:    req.Segments,
+		IsDelete:    2,
+	})
+
+	if err != nil {
+		api.JSON(c, err)
+		return
+	}
+	api.JSON(c, errs.ErrSuccess, map[string]uint64{"attr_id": req.AttrID})
+	return
 }
 
 /**

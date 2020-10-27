@@ -19,9 +19,19 @@ func NewAttrService() *AttrService {
 }
 
 //Create - Create a piece of category attr data
-// func (s *AttrService) Create(m *model.SAttr) (uint64, *errs.Errs) {
-// 	return s.Repo.Create(m)
-// }
+func (s *AttrService) Create(m *model.SAttr) (uint64, *errs.Errs) {
+	return s.Repo.Create(m)
+}
+
+//Delete - Delete a attr by id
+func (s *AttrService) Delete(attrID uint64) *errs.Errs {
+	return s.Repo.Delete(attrID)
+}
+
+//Update - Update a piece of attr data
+func (s *AttrService) Update(m *model.SAttr) *errs.Errs {
+	return s.Repo.Update(m)
+}
 
 //FindByID - Find category by id
 func (s *AttrService) FindByID(id uint64) (*model.SAttr, *errs.Errs) {

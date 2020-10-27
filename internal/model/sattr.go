@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"time"
 
 	"api.xinfos.com/driver"
 
@@ -10,18 +11,18 @@ import (
 
 //SAttr -
 type SAttr struct {
-	ID          uint64 `json:"id"`
-	Name        string `json:"name"`
-	FillType    uint   `json:"fill_type"`
-	IsRequired  uint   `json:"is_required"`
-	IsNumeric   uint   `json:"is_numeric"`
-	Unit        string `json:"unit"`
-	IsGeneric   uint   `json:"is_generic"`
-	IsSearching uint   `json:"is_searching"`
-	Segments    string `json:"segments"`
-	CreatedAt   string `json:"-"`
-	UpdatedAt   string `json:"-"`
-	IsDelete    uint   `json:"-"`
+	ID          uint64    `json:"id"`
+	Name        string    `json:"name"`
+	FillType    uint      `json:"fill_type"`
+	IsRequired  uint      `json:"is_required"`
+	IsNumeric   uint      `json:"is_numeric"`
+	Unit        string    `json:"unit"`
+	IsGeneric   uint      `json:"is_generic"`
+	IsSearching uint      `json:"is_searching"`
+	Segments    string    `json:"segments"`
+	CreatedAt   time.Time `json:"-"`
+	UpdatedAt   time.Time `json:"-"`
+	IsDelete    uint      `json:"-"`
 }
 
 type SAttrBlock struct {
@@ -49,10 +50,34 @@ func (t *SAttr) Create() error {
 	return nil
 }
 
+//Delete - Delete a record
+func (t *SAttr) Delete() error {
+	if err := driver.DB.Table(t.TableName()).Where("id = (?)", t.ID).Update("is_delete", 1).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+//Update - Update a record
+func (t *SAttr) Update() error {
+	if err := driver.DB.Table(t.TableName()).Where("id = (?)", t.ID).Update(t).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 //FindByID - 根据属性ID查询属性信息
 func (t *SAttr) FindByID(id uint64) (*SAttr, error) {
 	return t.findByMap(map[string]interface{}{
 		"id":        id,
+		"is_delete": 2,
+	})
+}
+
+//FindBySAttrName 根据属性名查询属性
+func (t *SAttr) FindBySAttrName(name string) (*SAttr, error) {
+	return t.findByMap(map[string]interface{}{
+		"name":      name,
 		"is_delete": 2,
 	})
 }
@@ -74,6 +99,25 @@ func (t *SAttr) FindAllBySAttrName(name string) ([]*SAttr, error) {
 //FindAllByQuery - Find all by query string
 func (t *SAttr) FindAllByQuery(query string, args []interface{}, orderby, groupBy string, page, pageSize uint) ([]*SAttr, int, error) {
 	return t.findAllByQuery("", query, args, orderby, groupBy, page, pageSize)
+}
+
+//IsSAttrNameExists - Check the attr name is exists
+func (t *SAttr) IsSAttrNameExists(name string) bool {
+	data, err := t.firstByMap("`name` = (?) AND `is_delete` = 2", []interface{}{name})
+	if err == nil && data != nil && data.ID > 0 {
+		return true
+	}
+	return false
+}
+
+func (t *SAttr) firstByMap(query string, args []interface{}) (*SAttr, error) {
+	var data SAttr
+	if err := driver.DB.Table(t.TableName()).Where(query, args...).First(&data).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, err
+		}
+	}
+	return &data, nil
 }
 
 func (t *SAttr) findByMap(wheremaps map[string]interface{}) (*SAttr, error) {

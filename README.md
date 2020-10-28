@@ -1,12 +1,12 @@
 # api.xinfos.com
 This is the basic API service of xinfos Mall, which mainly involves the backstage management of API, front-end mall API. The whole API service is developed using Golang, and the Gin framework is selected as the service infrastructure.
 
-## Contents
+### Contents
 - [Installation](#installation)
 - [Quick start](#quick-start)
-- [API list](#API list)
+- [API list](#api-list)
 
-## Installation
+### Installation
 
 1. Download the source code.
 
@@ -16,14 +16,14 @@ This is the basic API service of xinfos Mall, which mainly involves the backstag
 $ git clone https://github.com/xinfos/api.xinfos.com.git
 ```
 
-## Quick start
+### Quick start
 
 1.
 ```sh
 $ go run cmd/main.go
 ```
 
-## API list
+### API list
 
 | API Name                       | Request Method | Content-Type |   AUTH | Description |
 | ------------------------------ | -----------:| ---------------:| ------------:| ---------------:|

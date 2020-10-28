@@ -4,6 +4,7 @@ This is the basic API service of xinfos Mall, which mainly involves the backstag
 ### Contents
 - [Installation](#installation)
 - [Quick start](#quick-start)
+- [Directory](#directory)
 - [API list](#api-list)
 
 ### Installation
@@ -20,9 +21,13 @@ $ git clone https://github.com/xinfos/api.xinfos.com.git
 $ go run cmd/main.go
 ```
 
+### Directory
+| ── app
+
+
 ### API list
 
 | API Name                       | Request Method | Content-Type |   AUTH | Description |
-| ------------------------------ | -----------:| ---------------:| ------------:| ---------------:|
-| /backend/brand/list            | POST        | application/json|    NO  | Brand list interface |
+| ------------------------------ | :-----------:| :---------------:| :------------:| :---------------|
+| /backend/brand/list            | `POST`        | `application/json`|    NO  | Brand list interface |
 

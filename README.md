@@ -8,9 +8,7 @@ This is the basic API service of xinfos Mall, which mainly involves the backstag
 
 ### Installation
 
-1. Download the source code.
-
-[Go](https://golang.org/) installed (**version 1.13+ is required**), then you can use the below Go command to run.
+1. Download the source code, [Go](https://golang.org/) installed (**version 1.13+ is required**), then you can use the below Go command to run.
 
 ```sh
 $ git clone https://github.com/xinfos/api.xinfos.com.git
@@ -18,7 +16,6 @@ $ git clone https://github.com/xinfos/api.xinfos.com.git
 
 ### Quick start
 
-1.
 ```sh
 $ go run cmd/main.go
 ```

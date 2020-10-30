@@ -143,7 +143,6 @@ func UpdateAttr(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func GetAttr(c *gin.Context) {
 
@@ -182,7 +181,6 @@ func GetAttr(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func ListAttr(c *gin.Context) {
 	var req listAttrRequest

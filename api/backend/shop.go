@@ -77,7 +77,6 @@ type listShopRequest struct {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func CreateShop(c *gin.Context) {
 
@@ -128,7 +127,6 @@ func CreateShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func DeleteShop(c *gin.Context) {
 
@@ -171,7 +169,6 @@ func DeleteShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func UpdateShop(c *gin.Context) {
 	var req updateShopRequest
@@ -220,7 +217,6 @@ func UpdateShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func DashboardShop(c *gin.Context) {
 
@@ -259,7 +255,6 @@ func DashboardShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func GetShop(c *gin.Context) {
 
@@ -298,7 +293,6 @@ func GetShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 
 func InfoShop(c *gin.Context) {
@@ -340,7 +334,6 @@ func InfoShop(c *gin.Context) {
 *       "lastname": "Doe"
 *     }
 *
-* @apiUse UserNotFoundError
  */
 func ListShop(c *gin.Context) {
 	var req listShopRequest

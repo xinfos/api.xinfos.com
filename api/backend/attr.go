@@ -47,7 +47,58 @@ type queryAttrRequest struct {
 	Search string `json:"search" binding:"required"`
 }
 
-//CreateAttr - create new category
+/**
+* @api {post} /backend/attr/create 创建属性
+* @apiName CreateAttr
+*
+* @apiGroup 商品属性管理
+*
+* @apiParam (公共参数) {String} [request_id] 请求ID
+*
+* @apiParam (请求参数) {String} Name      	  属性名称
+* @apiParam (请求参数) {Number} [FillType = 2]   属性值填充类型 [1: 选项框 | 2: 输入框]
+* @apiParam (请求参数) {Number} [IsRequired = 2] 属性是否为必填项 [1:是 | 2: 否]
+* @apiParam (请求参数) {Number} [IsNumeric = 2]  属性值是否为数字类型 [1:是 | 2: 否]
+* @apiParam (请求参数) {String} [Unit]  	  属性单位
+* @apiParam (请求参数) {Number} [IsGeneric = 2]  是否是SPU通用属性 [1:是 | 2: 否]
+* @apiParam (请求参数) {Number} [IsSearching = 2]是否用于搜索过滤 [1:是 | 2: 否]
+* @apiParam (请求参数) {String} [Segments]   分割
+*
+* @apiSuccess (响应参数) {String} request_id 返回请求的ID.
+* @apiSuccess (响应参数) {Number} code 返回CODE码
+* @apiSuccess (响应参数) {String} msg 返回信息
+* @apiSuccess (响应参数) {Object[]} data 返回具体内容
+* @apiSuccess (响应参数) {Number} data.attr_id 属性ID
+* @apiSuccess (响应参数) {String} next ""
+*
+* @apiSuccessExample 响应示例:
+* {
+*   "request_id": "c3b51fe3-0dc6-4b69-9a66-508ecc9a8633",
+*   "code": 200,
+*   "msg": "请求成功"
+*   "data": {
+*      "attr_id": 100031
+*    },
+*    "next": ""
+* }
+*
+* @apiError (错误码) {Number} 180001 抱歉，创建失败!~
+* @apiError (错误码) {Number} 180002 抱歉，删除失败!~
+* @apiError (错误码) {Number} 180003 抱歉，删除失败，该属性被其他属性模板引用!~
+* @apiError (错误码) {Number} 180004 抱歉，更新失败!~
+* @apiError (错误码) {Number} 180005 抱歉，属性名已存在，请换一个名称重试!~
+* @apiError (错误码) {Number} 180006 抱歉，抱歉，没有找到相关的属性信息!~
+* @apiError (错误码) {Number} 180007 抱歉，由于属性为数值类型，单位为必填项!~
+*
+* @apiErrorExample 异常示例:
+*     {
+*       "request_id": "c3b51fe3-0dc6-4b69-9a66-508ecc9a8633",
+*       "code": 180001,
+*       "msg": "抱歉，创建失败!~"
+*       "data": null,
+*       "next": ""
+*     }
+ */
 func CreateAttr(c *gin.Context) {
 	var req createAttrRequest
 
@@ -123,27 +174,6 @@ func UpdateAttr(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/attr/get 获取单个属性详情
-* @apiName GetAttr
-* @apiGroup 后台管理接口/属性管理
-*
-* @apiParam {String} request_id  请求ID
-* @apiParam {String} [Name]      属性名称
-* @apiParam {Number} [PageNo]    页数
-* @apiParam {Number} [PageSize]  每页显示个数
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func GetAttr(c *gin.Context) {
 
 	var req getAttrRequest
@@ -161,27 +191,6 @@ func GetAttr(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/attr/list 获取属性列表
-* @apiName ListAttr
-* @apiGroup 后台管理接口/属性管理
-*
-* @apiParam {String} request_id  请求ID
-* @apiParam {String} [Name]      属性名称
-* @apiParam {Number} [PageNo]    页数
-* @apiParam {Number} [PageSize]  每页显示个数
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func ListAttr(c *gin.Context) {
 	var req listAttrRequest
 

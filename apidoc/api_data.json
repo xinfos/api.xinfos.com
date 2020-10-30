@@ -1,655 +1,205 @@
 [
   {
     "type": "post",
-    "url": "/backend/shop/create",
-    "title": "创建店铺接口",
-    "name": "CreateShop",
-    "group": "后台管理接口/创建店铺",
+    "url": "/backend/attr/create",
+    "title": "创建属性",
+    "name": "CreateAttr",
+    "group": "商品属性管理",
     "parameter": {
       "fields": {
-        "Parameter": [
+        "公共参数": [
           {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>店铺名称</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "desc",
-            "description": "<p>店铺描述</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "logo",
-            "description": "<p>店铺Logo</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "url",
-            "description": "<p>店铺官网</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/创建店铺"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/delete",
-    "title": "删除店铺接口",
-    "name": "DeleteShop",
-    "group": "后台管理接口/删除店铺",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "shop_id",
-            "description": "<p>店铺ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/删除店铺"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/get",
-    "title": "获取指定店铺详情接口",
-    "name": "GetShop",
-    "group": "后台管理接口/单个店铺详情",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "shop_id",
-            "description": "<p>店铺ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/单个店铺详情"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/get",
-    "title": "获取指定店铺详情接口",
-    "name": "GetShop",
-    "group": "后台管理接口/单个店铺详情",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "shop_id",
-            "description": "<p>店铺ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/单个店铺详情"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/get",
-    "title": "获取指定店铺详情接口",
-    "name": "GetShop",
-    "group": "后台管理接口/单个店铺详情",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "shop_id",
-            "description": "<p>店铺ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/单个店铺详情"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/list",
-    "title": "获取用户店铺列表接口",
-    "name": "ListShop",
-    "group": "后台管理接口/单个店铺详情",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
+            "group": "公共参数",
             "type": "String",
             "optional": true,
-            "field": "name",
-            "description": "<p>店铺名称</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "page_no",
-            "description": "<p>页数</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "page_size",
-            "description": "<p>每页显示个数</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/单个店铺详情"
-  },
-  {
-    "type": "post",
-    "url": "/backend/attr/get",
-    "title": "获取单个属性详情",
-    "name": "GetAttr",
-    "group": "后台管理接口/属性管理",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "request_id",
             "description": "<p>请求ID</p>"
-          },
+          }
+        ],
+        "请求参数": [
           {
-            "group": "Parameter",
+            "group": "请求参数",
             "type": "String",
-            "optional": true,
+            "optional": false,
             "field": "Name",
             "description": "<p>属性名称</p>"
           },
           {
-            "group": "Parameter",
+            "group": "请求参数",
             "type": "Number",
             "optional": true,
-            "field": "PageNo",
-            "description": "<p>页数</p>"
+            "field": "FillType",
+            "defaultValue": "2",
+            "description": "<p>属性值填充类型 [1: 选项框 | 2: 输入框]</p>"
           },
           {
-            "group": "Parameter",
+            "group": "请求参数",
             "type": "Number",
             "optional": true,
-            "field": "PageSize",
-            "description": "<p>每页显示个数</p>"
+            "field": "IsRequired",
+            "defaultValue": "2",
+            "description": "<p>属性是否为必填项 [1:是 | 2: 否]</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": true,
+            "field": "IsNumeric",
+            "defaultValue": "2",
+            "description": "<p>属性值是否为数字类型 [1:是 | 2: 否]</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": true,
+            "field": "Unit",
+            "description": "<p>属性单位</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": true,
+            "field": "IsGeneric",
+            "defaultValue": "2",
+            "description": "<p>是否是SPU通用属性 [1:是 | 2: 否]</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": true,
+            "field": "IsSearching",
+            "defaultValue": "2",
+            "description": "<p>是否用于搜索过滤 [1:是 | 2: 否]</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": true,
+            "field": "Segments",
+            "description": "<p>分割</p>"
           }
         ]
       }
     },
     "success": {
       "fields": {
-        "Success 200": [
+        "响应参数": [
           {
-            "group": "Success 200",
+            "group": "响应参数",
             "type": "String",
             "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
+            "field": "request_id",
+            "description": "<p>返回请求的ID.</p>"
           },
           {
-            "group": "Success 200",
+            "group": "响应参数",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>返回CODE码</p>"
+          },
+          {
+            "group": "响应参数",
             "type": "String",
             "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
+            "field": "msg",
+            "description": "<p>返回信息</p>"
+          },
+          {
+            "group": "响应参数",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>返回具体内容</p>"
+          },
+          {
+            "group": "响应参数",
+            "type": "Number",
+            "optional": false,
+            "field": "data.attr_id",
+            "description": "<p>属性ID</p>"
+          },
+          {
+            "group": "响应参数",
+            "type": "String",
+            "optional": false,
+            "field": "next",
+            "description": "<p>&quot;&quot;</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
+          "title": "响应示例:",
+          "content": "{\n  \"request_id\": \"c3b51fe3-0dc6-4b69-9a66-508ecc9a8633\",\n  \"code\": 200,\n  \"msg\": \"请求成功\"\n  \"data\": {\n     \"attr_id\": 100031\n   },\n   \"next\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "错误码": [
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180001",
+            "description": "<p>抱歉，创建失败!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180002",
+            "description": "<p>抱歉，删除失败!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180003",
+            "description": "<p>抱歉，删除失败，该属性被其他属性模板引用!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180004",
+            "description": "<p>抱歉，更新失败!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180005",
+            "description": "<p>抱歉，属性名已存在，请换一个名称重试!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180006",
+            "description": "<p>抱歉，抱歉，没有找到相关的属性信息!~</p>"
+          },
+          {
+            "group": "错误码",
+            "type": "Number",
+            "optional": false,
+            "field": "180007",
+            "description": "<p>抱歉，由于属性为数值类型，单位为必填项!~</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "异常示例:",
+          "content": "{\n  \"request_id\": \"c3b51fe3-0dc6-4b69-9a66-508ecc9a8633\",\n  \"code\": 180001,\n  \"msg\": \"抱歉，创建失败!~\"\n  \"data\": null,\n  \"next\": \"\"\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "api/backend/attr.go",
-    "groupTitle": "后台管理接口/属性管理"
-  },
-  {
-    "type": "post",
-    "url": "/backend/attr/list",
-    "title": "获取属性列表",
-    "name": "ListAttr",
-    "group": "后台管理接口/属性管理",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Name",
-            "description": "<p>属性名称</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "PageNo",
-            "description": "<p>页数</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "PageSize",
-            "description": "<p>每页显示个数</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/attr.go",
-    "groupTitle": "后台管理接口/属性管理"
-  },
-  {
-    "type": "post",
-    "url": "/backend/shop/update",
-    "title": "更新店铺信息接口",
-    "name": "UpdateShop",
-    "group": "后台管理接口/更新店铺信息",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "request_id",
-            "description": "<p>请求ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "shop_id",
-            "description": "<p>店铺ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "seller_id",
-            "description": "<p>卖家ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>店铺名称</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "desc",
-            "description": "<p>店铺描述</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "logo",
-            "description": "<p>店铺Logo</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "url",
-            "description": "<p>店铺官网</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "api/backend/shop.go",
-    "groupTitle": "后台管理接口/更新店铺信息"
+    "groupTitle": "商品属性管理"
   }
 ]

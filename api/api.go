@@ -9,7 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type response struct {
+//Response 公共返回结构
+type Response struct {
 	RequestID string      `json:"request_id"`
 	Code      int         `json:"code"`
 	Msg       string      `json:"msg"`
@@ -28,7 +29,7 @@ func JSON(c *gin.Context, err *errs.Errs, data ...interface{}) {
 		responseData = data[0]
 	}
 
-	c.JSON(http.StatusOK, response{
+	c.JSON(http.StatusOK, Response{
 		Code: err.ErrCode,
 		Msg:  err.ErrMsg,
 		Data: responseData,

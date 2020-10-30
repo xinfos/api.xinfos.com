@@ -55,29 +55,6 @@ type listShopRequest struct {
 	PageSize  uint   `json:"page_size"`
 }
 
-/**
-* @api {post} /backend/shop/create 创建店铺接口
-* @apiName CreateShop
-* @apiGroup 后台管理接口/创建店铺
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {String} name		店铺名称
-* @apiParam {String} desc		店铺描述
-* @apiParam {String} logo		店铺Logo
-* @apiParam {String} url		店铺官网
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func CreateShop(c *gin.Context) {
 
 	var req createShopRequest
@@ -108,26 +85,6 @@ func CreateShop(c *gin.Context) {
 
 }
 
-/**
-* @api {post} /backend/shop/delete 删除店铺接口
-* @apiName DeleteShop
-* @apiGroup 后台管理接口/删除店铺
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {Number} shop_id	店铺ID
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func DeleteShop(c *gin.Context) {
 
 	var req getShopRequest
@@ -146,30 +103,6 @@ func DeleteShop(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/shop/update 更新店铺信息接口
-* @apiName UpdateShop
-* @apiGroup 后台管理接口/更新店铺信息
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} shop_id	店铺ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {String} name		店铺名称
-* @apiParam {String} desc		店铺描述
-* @apiParam {String} logo		店铺Logo
-* @apiParam {String} url		店铺官网
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func UpdateShop(c *gin.Context) {
 	var req updateShopRequest
 
@@ -198,26 +131,6 @@ func UpdateShop(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/shop/get 获取指定店铺详情接口
-* @apiName GetShop
-* @apiGroup 后台管理接口/单个店铺详情
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {Number} shop_id	店铺ID
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func DashboardShop(c *gin.Context) {
 
 	var req infoShopRequest
@@ -236,26 +149,6 @@ func DashboardShop(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/shop/get 获取指定店铺详情接口
-* @apiName GetShop
-* @apiGroup 后台管理接口/单个店铺详情
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {Number} shop_id	店铺ID
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func GetShop(c *gin.Context) {
 
 	var req getShopRequest
@@ -273,27 +166,6 @@ func GetShop(c *gin.Context) {
 	api.JSON(c, errs.ErrSuccess, data)
 	return
 }
-
-/**
-* @api {post} /backend/shop/get 获取指定店铺详情接口
-* @apiName GetShop
-* @apiGroup 后台管理接口/单个店铺详情
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {Number} shop_id	店铺ID
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 
 func InfoShop(c *gin.Context) {
 
@@ -313,28 +185,6 @@ func InfoShop(c *gin.Context) {
 	return
 }
 
-/**
-* @api {post} /backend/shop/list 获取用户店铺列表接口
-* @apiName ListShop
-* @apiGroup 后台管理接口/单个店铺详情
-*
-* @apiParam {String} request_id	请求ID
-* @apiParam {Number} seller_id	卖家ID
-* @apiParam {String} [name]		店铺名称
-* @apiParam {Number} page_no	页数
-* @apiParam {Number} page_size	每页显示个数
-*
-* @apiSuccess {String} firstname Firstname of the User.
-* @apiSuccess {String} lastname  Lastname of the User.
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "John",
-*       "lastname": "Doe"
-*     }
-*
- */
 func ListShop(c *gin.Context) {
 	var req listShopRequest
 

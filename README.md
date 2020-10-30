@@ -22,10 +22,40 @@ $ go run cmd/main.go
 ```
 
 ### Directory
-| ── app
+```sh
+├── api                 # OpenAPI JSON schema files, protocol definition files.
+│   ├── backend         # backend API
+│   ├── v1              # V1 API 
+├── apidoc              # API document
+├── cmd                 # Main applications for this project.
+├── configs             # Configuration file templates or default configs.
+│   ├── config.go       # Configuration templates struct
+│   ├── config.yaml     # Configuration file
+├── driver              # Drivers of various middleware, such as MySQL,Redis
+├── internal            # Private application and library code.
+│   ├── model           # Data model
+│   ├── repository      # Data operation encapsulation
+│   │   └── cache       # Data cache
+│   ├── service         # Bu
+├── pkg                 # Packaging and Continuous Integration.
+│   ├── metrics         # metrics
+├── tools               # Supporting tools for this project.
+├── vendor              # Application dependencies
+├── go.mod              # go.mod
+├── go.sum              # go.sum
+└── README.md           # README
+```
 
 
 ### API list
+
+1、API documentation service can be started quickly.
+
+```sh
+go run apidoc/main.go
+```
+
+2、API 
 
 | API Name                       | Request Method | Content-Type |   AUTH | Description |
 | ------------------------------ | :-----------:| :---------------:| :------------:| :---------------|

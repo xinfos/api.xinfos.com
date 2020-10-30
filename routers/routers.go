@@ -1,79 +1,17 @@
 package routers
 
 import (
-	"api.xinfos.com/api/backend"
-	v1 "api.xinfos.com/api/v1"
-
+	backend "api.xinfos.com/routers/backend"
+	v1 "api.xinfos.com/routers/v1"
 	"github.com/gin-gonic/gin"
 )
 
+//Load 加载相关路由
 func Load(g *gin.Engine) *gin.Engine {
 
-	v1Api := g.Group("/v1")
-	{
-		v1Api.POST("/user/get", v1.GetUserInfoByID)
-		v1Api.POST("/user/create", v1.CreateUser)
-		v1Api.POST("/product/get", v1.GetBeforeCreateByCatID)
-	}
+	v1.NewV1API(g)
 
-	//backendAPI - Background service management interface
-	backendAPI := g.Group("/backend")
-	{
-		//shop management api interface
-		backendAPI.POST("/shop/create", backend.CreateShop)
-		backendAPI.POST("/shop/delete", backend.DeleteShop)
-		backendAPI.POST("/shop/update", backend.UpdateShop)
-		backendAPI.POST("/shop/dashboard", backend.DashboardShop)
-		backendAPI.POST("/shop/get", backend.GetShop)
-		backendAPI.POST("/shop/info", backend.InfoShop)
-		backendAPI.POST("/shop/list", backend.ListShop)
-
-		//brand management api interface
-		backendAPI.POST("/brand/create", backend.CreateBrand)
-		backendAPI.POST("/brand/delete", backend.DeleteBrand)
-		backendAPI.POST("/brand/update", backend.UpdateBrand)
-		backendAPI.POST("/brand/get", backend.GetBrand)
-		backendAPI.POST("/brand/list", backend.ListBrand)
-
-		//category management api interface
-		backendAPI.POST("/category/create", backend.CreateCategory)
-		backendAPI.POST("/category/delete", backend.DeleteCategory)
-		backendAPI.POST("/category/update", backend.UpdateCategory)
-		backendAPI.POST("/category/get", backend.GetCategory)
-		backendAPI.POST("/category/sub", backend.ListSubCategory)
-		backendAPI.POST("/category/attrs/get", backend.GetCategoryAttrs)
-		backendAPI.POST("/category/list", backend.ListCategory)
-
-		//Attrsgroup management api interface
-		backendAPI.POST("/attrgroup/create", backend.CreateAttrGroup)
-
-		//Attrs management api interface
-		backendAPI.POST("/attr/create", backend.CreateAttr)
-		backendAPI.POST("/attr/delete", backend.DeleteAttr)
-		backendAPI.POST("/attr/update", backend.UpdateAttr)
-		backendAPI.POST("/attr/get", backend.GetAttr)
-		backendAPI.POST("/attr/list", backend.ListAttr)
-		backendAPI.POST("/attr/query", backend.QueryAttr)
-
-		//AttrValues management api interface
-		backendAPI.POST("/attrval/create", backend.CreateAttr)
-		backendAPI.POST("/attrval/delete", backend.CreateAttr)
-		backendAPI.POST("/attrval/update", backend.DeleteAttr)
-		backendAPI.POST("/attrval/list", backend.DeleteAttr)
-
-		//AttrTemplate management api interface
-		backendAPI.POST("/attr/template/create", backend.CreateAttrTemplate)
-
-		//product management api interface
-		backendAPI.POST("/product/create", backend.CreateProduct)
-		backendAPI.POST("/product/delete", backend.DeleteProduct)
-		backendAPI.POST("/product/update", backend.UpdateProduct)
-		backendAPI.POST("/product/get", backend.GetProduct)
-		backendAPI.POST("/product/list", backend.ListProduct)
-
-		//staff management api interface
-		backendAPI.POST("/staff/list", backend.ListStaff)
-	}
+	backend.NewBackendAPI(g)
 
 	return g
 }
